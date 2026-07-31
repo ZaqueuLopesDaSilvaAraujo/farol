@@ -1,0 +1,33 @@
+<!-- ccf:managed-start v1.1.0 -->
+<!-- Bloco gerenciado pelo Farol (context framework). /fw-init mescla este
+     bloco com um CLAUDE.md existente sem apagar conteúdo do time. -->
+
+# Contexto do Projeto
+
+@.claude/context/index.md
+
+## Regras do framework
+
+- O diretório `.claude/context/` é a fonte primária de conhecimento sobre este
+  projeto. Consulte-o ANTES de explorar o código-fonte.
+- Carregue arquivos adicionais de contexto apenas conforme a tabela
+  "Carregue quando" do índice. Não leia o repositório inteiro.
+- Nunca leia: lockfiles, `node_modules/`, `vendor/`, `dist/`, `build/`,
+  `target/`, arquivos gerados, binários, assets.
+- Delegue ao subagent `fw-scout` qualquer exploração que exija ler 3+ arquivos
+  de código; use o resumo retornado, não releia os arquivos.
+- Após mudanças significativas de código, sugira `fw-reviewer`. Para bugs não
+  triviais, sugira `fw-debugger`.
+- Ao aprender um fato permanente sobre o projeto (comando, convenção, pegadinha),
+  registre-o em `.claude/context/memory.md` (1 linha, seção correta). Nunca
+  registre informação temporária.
+- Se `/fw-status` ou o manifesto indicarem contexto desatualizado (muitos commits
+  desde a âncora), sugira `/fw-update` antes de tarefas grandes.
+
+## Segurança (inegociável)
+
+- Nunca: alterar código sem pedido explícito, instalar dependências, executar
+  comandos destrutivos, fazer commit/push, tocar produção, remover arquivos —
+  sem autorização explícita do usuário nesta conversa.
+
+<!-- ccf:managed-end -->

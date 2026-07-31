@@ -1,0 +1,4 @@
+# Exceções do fw-guard — 1 regex (grep -E, case-insensitive) por linha.
+# Arquivo do TIME: preservado em upgrades do framework.
+# Exemplo: liberar push apenas para branches de preview:
+# git push origin preview/
