@@ -26,7 +26,10 @@ Atualizar o Farol é operação nativa do Claude Code: `/plugin` → marketplace
    CRLF no Windows e o hash acusa customização falsa), o
    `.claude/hooks/README.md` da 1.x, e os diretórios `.claude/skills/` e
    `.claude/agents/` se ficarem vazios. **NÃO remova** `.claude/context/`
-   nem o CLAUDE.md — são seus.
+   nem o CLAUDE.md — são seus. A remoção dos agents antigos não é só
+   higiene: agents em `.claude/agents/` do projeto SOBRESCREVEM agents
+   homônimos do plugin (comportamento documentado do Claude Code) — um
+   `fw-scout` da 1.x esquecido no projeto silenciaria o do plugin.
 3. **Rode `/farol:init`** — em modo atualização, ele substitui o bloco
    gerenciado do CLAUDE.md (que ainda ensina comandos `/fw-*` mortos) e
    oferece refrescar `.claude/context/_templates/`, tudo com backup. Este

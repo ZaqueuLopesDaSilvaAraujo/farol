@@ -42,6 +42,17 @@ projetos fora do Farol, adote a prática de desativá-lo neles
 (`/plugin disable farol` / `enable`) ou avalie instalar em escopo de
 projeto.
 
+## Test-drive sem instalar nada
+
+Quer experimentar antes de instalar? Carregue o Farol só para uma sessão:
+
+```bash
+claude --plugin-url https://github.com/ZaqueuLopesDaSilvaAraujo/farol/releases/latest/download/farol-v2.0.1.zip
+```
+
+(ou baixe o zip e use `claude --plugin-dir ./farol-v2.0.1.zip`). Nada fica
+instalado ao fechar a sessão.
+
 ## Caminho alternativo: instalação local (zip)
 
 Para ambientes sem acesso ao marketplace, baixe o zip da Release e:
