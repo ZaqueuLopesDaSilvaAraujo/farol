@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v1.2.0
+# Farol — v1.3.0
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*
@@ -35,6 +35,8 @@ desse caso, seja honesto consigo:
 - Projeto pequeno com documentação artesanal densa? O modo **adopt** faz o
   índice apontar para os seus docs (AGENTS.md etc.) em vez de parafraseá-los
   — e a documentação do time SEMPRE prevalece sobre o Farol em divergências.
+- Documentação parcial (um README com comandos, sem regras de produto)? O
+  modo **augment** aproveita o que existe e cria apenas as lacunas.
 - Dúvida pontual num arquivo? Grep responde de graça; nenhum framework de
   contexto compete com isso, nem deve.
 - Só quer economia de tokens na doc existente? Adote apenas o padrão da
@@ -55,7 +57,7 @@ primária de conhecimento, com carga mínima de tokens.
 
 | Comando | Função |
 |---|---|
-| `/fw-init` | Instala o framework, detecta stack, preserva arquivos existentes com backup |
+| `/fw-init [--mode adopt\|augment\|bootstrap]` | Instala, detecta stack e maturidade documental, recomenda o modo, preserva arquivos com backup |
 | `/fw-contextualize` | Descobre arquitetura, módulos, comandos e convenções e preenche o contexto |
 | `/fw-update` | Atualização incremental do contexto (ancorada em `git diff`) |
 | `/fw-consolidate` | Consolida a memória: deduplica, promove decisões, remove efêmeros |

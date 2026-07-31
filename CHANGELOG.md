@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.3.0 — Triagem do segundo relato
+- **Modo `augment`** e seleção explícita: `/fw-init --mode
+  adopt|augment|bootstrap`; sem flag, o init avalia maturidade documental
+  por sinais objetivos e RECOMENDA — em dúvida relevante, pergunta, nunca
+  escolhe em silêncio.
+- **Estados de confiança formalizados**: Confirmado (com evidência) /
+  Inferido (nunca vira fato) / Não identificado (lacuna honesta) — no
+  contrato do scout, nas regras da contextualização e no template do índice.
+- **Orçamento de contexto**: bloco `contextBudget` no manifesto; a
+  contextualização mede e grava o custo always-on (bytes ÷ 4) e corta antes
+  de estourar o warning; `/fw-status` vigia e trata `hardLimit` como erro.
+- **`/fw-status` expandido**: integridade do bloco gerenciado, recursos
+  `fw-*` no disco, arquivos obrigatórios por modo, orçamento.
+- **Release determinístico**: `scripts/release.py` empacota, valida nomes e
+  comprimentos, extrai em diretório temporário e compara conteúdo byte a
+  byte — falha o release em qualquer divergência (só arquivos entram no
+  zip: diretório vazio nunca mais). `tests/PROTOCOL.md` documenta os 10
+  cenários de validação reproduzíveis.
+- Recusados conscientemente (ver discussão da triagem): templates por modo,
+  scripts de instalação em shell, merge de 3 vias, taxonomia de 6 classes de
+  tarefa e a redefinição de `/fw-update` (atualização de framework virá como
+  plugin, sem colisão de nomes).
+
 ## 1.2.0 — Relato de campo (experimento em projeto real)
 Correções derivadas do primeiro teste de campo — projeto pequeno com
 contexto artesanal denso. Obrigado ao relato: cada item abaixo veio dele.

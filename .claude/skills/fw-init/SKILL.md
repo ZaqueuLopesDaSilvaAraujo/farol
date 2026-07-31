@@ -47,10 +47,24 @@ inequívoco pelos manifestos; caso contrário escreva `a confirmar` — um chute
 errado no índice vale menos que uma lacuna honesta (o /fw-contextualize
 confirma na primeira rodada).
 
-Detecte também o **modo adopt**: se existir documentação artesanal com
-substância (AGENTS.md, CONTRIBUTING.md, docs de arquitetura, README denso),
-registre `"adopt_mode": true` — a contextualização vai apontar para esses
-documentos, não reescrevê-los.
+## 3b. Seleção do modo (adopt | augment | bootstrap)
+
+O usuário pode fixar o modo: `/fw-init --mode adopt|augment|bootstrap`.
+Sem `--mode`, avalie a maturidade documental por sinais objetivos —
+presença E substância de: AGENTS.md/CLAUDE.md, CONTRIBUTING.md, docs de
+arquitetura, registros de decisão, princípios de produto, comandos
+documentados, hierarquia de autoridade explícita. Um arquivo isolado não
+basta; avalie cobertura.
+
+- Cobertura ampla → recomende **adopt**: índice de ponteiros; a doc do time
+  é a fonte.
+- Cobertura parcial (ex.: README com comandos, sem regras de produto) →
+  recomende **augment**: aproveitar o que existe e preencher só as lacunas.
+- Sem documentação relevante → recomende **bootstrap**: construir o contexto.
+
+Sinais claros → prossiga anunciando o modo escolhido e o porquê (1 linha).
+Dúvida relevante entre dois modos → PERGUNTE ao usuário; nunca escolha em
+silêncio. Registre o modo no manifesto.
 
 ## 4. Preencher o índice
 
@@ -73,11 +87,16 @@ Crie `.claude/context/manifest.json`:
 ```json
 {
   "framework": "farol",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "installed_at": "<ISO-8601>",
   "contextualized_at": null,
   "anchor_mode": "git | date",
-  "adopt_mode": false,
+  "mode": "adopt | augment | bootstrap",
+  "contextBudget": {
+    "alwaysOnEstimatedTokens": null,
+    "warningThresholdTokens": 1800,
+    "hardLimitTokens": 2500
+  },
   "anchor_commit": null,
   "inventory": {}
 }
@@ -86,7 +105,7 @@ Crie `.claude/context/manifest.json`:
 ## 7. Relatório final
 
 Até 15 linhas: criado, preservado/backupeado, stack detectada, `anchor_mode`,
-e o próximo passo: **`/fw-contextualize`**. Ofereça (sem ativar sem
+modo selecionado ou recomendado (com o porquê), e o próximo passo: **`/fw-contextualize`**. Ofereça (sem ativar sem
 confirmação) os hooks opcionais de `.claude/hooks/README.md`. Sugira ao
 usuário adicionar `.claude/backups/` ao `.gitignore` e commitar `.claude/` +
 `CLAUDE.md` (ver INSTALL.md, passo 4) — sem executar comandos git por ele.

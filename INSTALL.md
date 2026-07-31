@@ -1,4 +1,4 @@
-# Instalação — Farol v1.2.0
+# Instalação — Farol v1.3.0
 
 Guia de uma página. Tempo total: ~10 minutos (a maior parte é a
 contextualização, que roda sozinha).
@@ -13,9 +13,11 @@ mínimo de tokens e sem nunca tocar no código-fonte.
 ## Antes de instalar: este framework é para o seu projeto?
 
 O Farol foi desenhado para projetos médios/grandes ou pouco documentados.
-Se o seu projeto é pequeno e já tem contexto artesanal denso (AGENTS.md,
-CONTRIBUTING.md caprichados), o `/fw-init` ativa o **modo adopt**: o Farol
-aponta para a sua documentação em vez de reescrevê-la. E se nem isso fizer
+O `/fw-init` avalia a maturidade da sua documentação e recomenda um modo:
+**adopt** (doc madura → o Farol aponta para ela, nunca a reescreve),
+**augment** (doc parcial → preenche só as lacunas) ou **bootstrap** (sem doc
+→ constrói o contexto). Você também pode fixar:
+`/fw-init --mode adopt|augment|bootstrap`. E se nem isso fizer
 sentido, roube só a ideia da tabela "Carregue quando" do template de índice
 — núcleo sempre carregado + seções sob demanda — sem instalar nada.
 
@@ -31,7 +33,7 @@ sentido, roube só a ideia da tabela "Carregue quando" do template de índice
 
 ```bash
 cd /caminho/do/seu-projeto
-unzip farol-v1.2.0.zip
+unzip farol-v1.3.0.zip
 ```
 
 Isso adiciona `.claude/`, `CLAUDE.md.ccf` e documentação. Seu código não é
@@ -66,7 +68,7 @@ preenche `.claude/context/`. Ao final, o Claude pede validação de 3–5 fatos.
 ```bash
 echo ".claude/backups/" >> .gitignore
 git add .claude/ CLAUDE.md .gitignore
-git commit -m "chore: instala Farol v1.2.0 + contexto inicial"
+git commit -m "chore: instala Farol v1.3.0 + contexto inicial"
 ```
 
 Commitar: `.claude/` (agents, skills, hooks, **context/**) e `CLAUDE.md`.

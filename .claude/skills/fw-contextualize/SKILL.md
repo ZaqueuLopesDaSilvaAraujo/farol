@@ -34,11 +34,21 @@ paráfrase. Extraia dela duas coisas:
 2. **A ordem de autoridade** — quais docs mandam e em que ordem (seção
    "Fontes de autoridade" do índice).
 
-**Modo adopt** (`adopt_mode: true` no manifesto, ou docs densos detectados):
-o índice vira um ÍNDICE DE PONTEIROS — cada seção aponta para o doc do time
-que a cobre (`ver AGENTS.md §X`), e você só ESCREVE o que for novo e
-verificado (ausente dos docs). Duplicar documentação existente cria uma
-segunda fonte de verdade que apodrece: é proibido.
+**Execução por modo** (campo `mode` do manifesto):
+
+- **adopt** — o índice vira um ÍNDICE DE PONTEIROS: cada seção aponta para o
+  doc do time que a cobre (`ver AGENTS.md §X`), e você só ESCREVE o que for
+  novo e verificado (ausente dos docs). Duplicar documentação existente cria
+  uma segunda fonte de verdade que apodrece: é proibido. O conteúdo
+  adicional always-on deve ser mínimo — a meta é localizar a fonte, não
+  repetir o conhecimento.
+- **augment** — aponte para o que a doc existente já cobre; compare-a com o
+  checklist do índice (princípios, comandos, arquitetura, módulos críticos,
+  convenções) para identificar LACUNAS; crie somente arquivos/seções que as
+  preencham. O relatório final separa três listas: coberto pela doc
+  existente × criado agora × pendente de confirmação humana.
+- **bootstrap** — sem doc relevante: execute as rodadas 1–5 completas e crie
+  o contexto, com estados de confiança rigorosos (nada inferido vira fato).
 
 ## Rodadas de descoberta (missões do fw-scout)
 
@@ -83,6 +93,14 @@ do repo)`. Nunca deixe o índice apontar para um arquivo que você não criou:
 ao final, verifique cada alvo da tabela "Carregue quando" e da lista de
 módulos.
 
+Estados de confiança (obrigatórios em todo fato registrado):
+- **Confirmado** — evidência citada (arquivo:linha, script, CI ou doc do
+  time). É o único estado que arquivos always-on devem priorizar.
+- **Inferido** — hipótese plausível com evidência parcial; NUNCA apresentada
+  como fato; inferências extensas ficam fora do índice ou claramente
+  sinalizadas.
+- **Não identificado** — lacuna honesta; sempre melhor que um chute.
+
 ## Finalização
 
 1. Atualize `manifest.json`: `contextualized_at`; se `anchor_mode` = "git",
@@ -90,7 +108,15 @@ módulos.
    `{"arquivo": {"hash": "<git hash-object arquivo>"}}` para cada arquivo de
    contexto. Use SEMPRE `git hash-object` (determinístico e idêntico em
    qualquer OS — nunca sha1sum/shasum). Sem git, deixe `inventory` vazio.
-2. Peça ao usuário para validar 3–5 fatos-chave descobertos (comandos e
+2. Meça o custo always-on: bytes de `CLAUDE.md` + `index.md` (+ imports
+   diretos); tokens ≈ bytes ÷ 4. Grave em
+   `contextBudget.alwaysOnEstimatedTokens` no manifesto. Acima de
+   `warningThresholdTokens` → corte ANTES de finalizar (mover conteúdo para
+   sob-demanda); em modo adopt, o acréscimo sobre a doc do time deve ser
+   mínimo.
+3. Peça ao usuário para validar 3–5 fatos-chave descobertos (comandos e
    arquitetura). Corrija o que ele apontar.
-3. Relatório final em até 15 linhas: o que foi documentado, incertezas
-   restantes, e lembrete de `/fw-update` após mudanças relevantes.
+4. Relatório final em até 15 linhas: modo executado; o que foi documentado
+   (em augment: coberto × criado × pendente); custo always-on antes/depois
+   vs orçamento; incertezas restantes; lembrete de `/fw-update` após
+   mudanças relevantes.

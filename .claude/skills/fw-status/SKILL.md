@@ -32,9 +32,20 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
    Ponteiro morto num arquivo always-on é a falha de prioridade máxima
    deste relatório — pior que ausência, porque mente com confiança.
 8. Seção "Princípios e restrições (INVIOLÁVEIS)" existe e não está vazia?
+9. Bloco gerenciado: marcadores `ccf:managed-start`/`ccf:managed-end`
+   presentes e únicos no CLAUDE.md?
+10. Recursos instalados: os 3 agents e as 6 skills `fw-*` existem no disco?
+11. Obrigatórios por modo: adopt → "Fontes de autoridade" preenchida com
+    alvos existentes; augment → lacunas pendentes listadas (ou zeradas);
+    bootstrap → `architecture.md` e `conventions.md` existem.
+12. Orçamento de contexto: some os bytes dos arquivos always-on (CLAUDE.md +
+    index.md + imports diretos), estime tokens (bytes ÷ 4) e compare com o
+    `contextBudget` do manifesto. Acima de `warningThresholdTokens` →
+    alerta com sugestão concreta de corte; acima de `hardLimitTokens` →
+    ERRO.
 
 ## Saída
 
-Painel de até 12 linhas: versão do framework, idade do contexto (commits e
-dias), status de cada verificação (OK/atenção), e no máximo 2 ações
-recomendadas em ordem de prioridade.
+Painel de até 15 linhas: versão, modo, idade do contexto (commits e dias),
+custo always-on estimado vs orçamento, status de cada verificação
+(OK/atenção/erro), e no máximo 2 ações recomendadas em ordem de prioridade.

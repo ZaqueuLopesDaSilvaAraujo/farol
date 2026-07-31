@@ -1,7 +1,9 @@
 # {NOME_DO_PROJETO} — Índice de Contexto
 
 <!-- ÚNICO arquivo always-on. Teto: 120 linhas. Fatos, não prosa.
-     Este arquivo APONTA para conhecimento; não o repete. -->
+     Este arquivo APONTA para conhecimento; não o repete.
+     Estados: Confirmado exige evidência; (inferido) nunca vira fato;
+     "não identificado" é lacuna honesta. Always-on prioriza Confirmado. -->
 
 ## Identidade
 - **O que é**: {1 linha: propósito do sistema}

@@ -34,8 +34,8 @@ Responda SOMENTE com:
 ## Resumo
 <até 10 linhas: a resposta direta à missão>
 
-## Fatos verificados
-- <fato> (arquivo:linha)
+## Fatos
+- [Confirmado|Inferido] <fato> (evidência: arquivo:linha)
 - ...
 
 ## Incertezas

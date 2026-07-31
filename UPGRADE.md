@@ -23,6 +23,13 @@
 4. Atualize `"version"` no `.claude/context/manifest.json`.
 5. Rode `/fw-status` para validar integridade.
 
+## Migração 1.2.x → 1.3.0
+
+No `.claude/context/manifest.json`: substitua `"adopt_mode": true|false` por
+`"mode": "adopt"` (se era true) ou `"bootstrap"`/`"augment"` (conforme o
+projeto), e adicione o bloco `contextBudget` (ver template no /fw-init).
+Depois rode `/fw-status` — a checagem 11 valida os obrigatórios do modo.
+
 ## Customização sem conflito
 
 Precisa de um agente/skill próprio do time? Crie **sem** o prefixo `fw-`
