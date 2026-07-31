@@ -32,8 +32,12 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
    Ponteiro morto num arquivo always-on é a falha de prioridade máxima
    deste relatório — pior que ausência, porque mente com confiança.
 8. Seção "Princípios e restrições (INVIOLÁVEIS)" existe e não está vazia?
+   (vazia em modo adopt → sugerir reavaliar para augment)
 9. Bloco gerenciado: marcadores `ccf:managed-start`/`ccf:managed-end`
-   presentes e únicos no CLAUDE.md?
+   presentes, únicos E com a MESMA versão do plugin
+   (`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`)? Divergência =
+   ERRO: o bloco always-on está ensinando comandos de outra era — rode
+   /farol:init para atualizá-lo.
 10. Recursos instalados: o plugin `farol` está ativo (as skills `/farol:*`
     respondem) e os 3 agents `fw-*` aparecem entre os agents disponíveis?
 11. Obrigatórios por modo: adopt → "Fontes de autoridade" preenchida com
@@ -46,6 +50,10 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
     está inflada em ~55% a favor da luz verde — recalibre no manifesto. Acima de `warningThresholdTokens` →
     alerta com sugestão concreta de corte; acima de `hardLimitTokens` →
     ERRO.
+13. Esquema legado: o manifesto contém `adopt_mode`, ou não contém `mode`
+    ou `bytesPerToken`? → ALERTA "manifesto no esquema 1.x" com ponteiro
+    para a migração do UPGRADE.md. Templates do projeto mencionando
+    comandos `/fw-*` → mesmo alerta (rode /farol:init para refrescá-los).
 
 ## Saída
 

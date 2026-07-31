@@ -20,6 +20,7 @@ REQUIRED = [
     "skills/decision/SKILL.md", "skills/status/SKILL.md",
     "templates/index.md", "hooks/fw-guard.sh",
     "assets/banner.png", "scripts/release.py", "tests/PROTOCOL.md",
+    ".gitattributes",
 ]
 
 def collect():

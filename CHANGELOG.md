@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.1 — Quarto relato de campo
+- **Migração não falha mais em silêncio** (o bug mais sério do relato):
+  `/farol:init` ganhou modo atualização — compara a versão do marcador
+  `ccf:managed-*` com a do plugin, substitui o bloco gerenciado e oferece
+  refrescar os templates do projeto (única exceção à não-sobrescrita, com
+  backup e comparação que ignora CRLF). UPGRADE.md com a migração completa,
+  incluindo sobras e a armadilha do CRLF no Windows.
+- **`/farol:status` vigia eras**: checagem 9 compara versão do bloco vs
+  plugin (divergência = ERRO); nova checagem 13 detecta manifesto 1.x
+  (`adopt_mode`) e templates ensinando comandos `/fw-*` mortos.
+- **`.gitattributes`** força LF em `*.sh`/`*.py` — mata o
+  `bad interpreter: ^M` do fw-guard sob Git Bash na origem.
+- **Custo global documentado com franqueza**: ~0,9k tokens em toda sessão
+  da máquina, mesmo sem Farol no projeto; prática do `/plugin disable`
+  registrada. CLI (`claude plugin …`) documentado para agentes.
+- **Regra de modo refinada**: dimensão "princípios de produto" pesa
+  separadamente; adopt com invioláveis vazios sugere reavaliar (init,
+  contextualize e status).
+
 ## 2.0.0 — Plugin do Claude Code (breaking)
 - **Distribuição por plugin**: instala com 2 comandos
   (`/plugin marketplace add ZaqueuLopesDaSilvaAraujo/farol` +

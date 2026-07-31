@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v2.0.0
+# Farol — v2.0.1
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*
@@ -105,6 +105,10 @@ Migrações de esquema, quando existirem, ficam em `UPGRADE.md`.
 4. Contextualização com orçamento duro de leitura e lista de exclusão obrigatória.
 5. Atualização incremental ancorada no commit registrado em `manifest.json`.
 6. `memory.md` com teto de 150 linhas + consolidação periódica.
+
+Nota de honestidade 2 (v2.0): o plugin em escopo de usuário custa ~0,9k
+tokens em toda sessão da máquina, mesmo em projetos sem Farol — documente
+`/plugin disable farol` como prática nos projetos que não o usam.
 
 Nota de honestidade: esses mecanismos limitam e vigiam o custo — não
 garantem que o total caia em todo cenário. Em modo adopt sobre doc madura,

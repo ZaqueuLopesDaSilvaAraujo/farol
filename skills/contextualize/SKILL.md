@@ -120,7 +120,8 @@ Estados de confiança (obrigatórios em todo fato registrado):
    mínimo.
 3. Peça ao usuário para validar 3–5 fatos-chave descobertos (comandos e
    arquitetura). Corrija o que ele apontar.
-4. Relatório final em até 15 linhas: modo executado; o que foi documentado
+4. Relatório final em até 15 linhas: modo executado (adopt que terminou
+   com invioláveis vazios → sugira reavaliar para augment); o que foi documentado
    (em augment: coberto × criado × pendente); custo always-on antes/depois
    vs orçamento; incertezas restantes; lembrete de `/farol:update` após
    mudanças relevantes.

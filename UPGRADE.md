@@ -18,16 +18,26 @@ Atualizar o Farol é operação nativa do Claude Code: `/plugin` → marketplace
 
 ## Migração 1.x → 2.0
 
-1. Instale o plugin (2 comandos — ver INSTALL.md).
-2. Em cada projeto que usava o zip da 1.x, remova a cópia embutida do
-   framework: `.claude/skills/fw-*`, `.claude/agents/fw-*` e, se não
-   customizou, `.claude/hooks/fw-*`. **NÃO remova** `.claude/context/` nem o
-   CLAUDE.md — são seus.
-3. Os comandos mudaram de nome: `/fw-<skill>` → `/farol:<skill>`
-   (ex.: `/fw-status` → `/farol:status`). Os agents mantêm os nomes
-   (`fw-scout`, `fw-reviewer`, `fw-debugger`).
-4. Rode `/farol:status` — ele valida manifesto, bloco gerenciado e ponteiros.
-5. Manifesto: se vier da 1.2.x, aplique também a migração abaixo.
+1. Instale o plugin (2 comandos — ver INSTALL.md; agentes e automações usam
+   o CLI: `claude plugin marketplace add …` / `claude plugin install …`).
+2. Em cada projeto que usava o zip da 1.x, remova a cópia embutida:
+   `.claude/skills/fw-*`, `.claude/agents/fw-*`, `.claude/hooks/fw-*` (se
+   não customizados — compare IGNORANDO fim de linha, pois o git converte
+   CRLF no Windows e o hash acusa customização falsa), o
+   `.claude/hooks/README.md` da 1.x, e os diretórios `.claude/skills/` e
+   `.claude/agents/` se ficarem vazios. **NÃO remova** `.claude/context/`
+   nem o CLAUDE.md — são seus.
+3. **Rode `/farol:init`** — em modo atualização, ele substitui o bloco
+   gerenciado do CLAUDE.md (que ainda ensina comandos `/fw-*` mortos) e
+   oferece refrescar `.claude/context/_templates/`, tudo com backup. Este
+   passo NÃO é opcional: sem ele, o arquivo always-on continua mentindo.
+4. Os comandos mudaram: `/fw-<skill>` → `/farol:<skill>`. Agents mantêm os
+   nomes (`fw-scout`, `fw-reviewer`, `fw-debugger`).
+5. Rode `/farol:status` — as checagens 9 e 13 confirmam bloco na versão
+   certa e manifesto no esquema novo; se vier da 1.2.x, aplique também a
+   migração de manifesto abaixo.
+6. Revise o `git status` e commite o resultado — a migração mexe em vários
+   arquivos do `.claude/` e no CLAUDE.md.
 
 ## Migração 1.2.x → 1.3.x (manifesto)
 

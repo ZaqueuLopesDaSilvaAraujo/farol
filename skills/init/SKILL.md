@@ -18,8 +18,17 @@ projeto em estado inconsistente se interrompido). Nunca toque em código-fonte.
 - Anote se há git disponível E repositório inicializado → define
   `anchor_mode`: `"git"` (ideal) ou `"date"` (degradado; avise que a
   atualização incremental fica limitada — recomende `git init`).
-- Se `.claude/context/manifest.json` já existe: framework instalado. Informe
-  a versão e pare (sugira /farol:update ou UPGRADE.md).
+- Se `.claude/context/manifest.json` já existe: entre em **modo
+  atualização** (não pare). Compare a versão do manifesto e a do marcador
+  `ccf:managed-start` com a versão do plugin
+  (`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`); se divergirem:
+  (a) substitua APENAS o bloco gerenciado do CLAUDE.md pela versão nova,
+  com backup; (b) ofereça refrescar `.claude/context/_templates/` a partir
+  de `${CLAUDE_PLUGIN_ROOT}/templates/` — templates são a ÚNICA exceção à
+  regra de não-sobrescrita, porque são cópias de origem do framework
+  (backup antes; compare ignorando fim de linha CRLF para não acusar
+  customização falsa); (c) atualize `version` no manifesto. NUNCA toque no
+  restante de `.claude/context/`. Depois, siga direto ao relatório final.
 
 ## 2. Estrutura e índice-stub (antes de qualquer referência a eles)
 
@@ -65,6 +74,13 @@ basta; avalie cobertura.
   recomende **augment**: aproveitar o que existe e preencher só as lacunas.
 - Sem documentação relevante → recomende **bootstrap**: construir o contexto.
 
+Pese a dimensão **princípios de produto** separadamente das demais: doc
+madura em arquitetura/convenções mas SEM princípios ou decisões registrados
+está na fronteira adopt/augment — declare isso explicitamente na
+recomendação. (Se adopt for escolhido e a contextualização terminar com a
+seção de invioláveis vazia, o relatório dela deve sugerir reavaliar para
+augment.)
+
 Sinais claros → prossiga anunciando o modo escolhido e o porquê (1 linha).
 Dúvida relevante entre dois modos → PERGUNTE ao usuário; nunca escolha em
 silêncio. Registre o modo no manifesto.
@@ -92,7 +108,7 @@ Crie `.claude/context/manifest.json`:
 ```json
 {
   "framework": "farol",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "installed_at": "<ISO-8601>",
   "contextualized_at": null,
   "anchor_mode": "git | date",
@@ -117,7 +133,9 @@ Crie `.claude/context/manifest.json`:
 - Sem calibração — escolha pelo idioma dominante do contexto:
   pt-BR/es/acentuados ≈ **2,6** · inglês ≈ **4,0** · misto/código ≈ **3,0**.
 Na dúvida, use o valor MENOR: um guarda de orçamento deve superestimar o
-custo (alarme cedo), nunca subestimá-lo (luz verde falsa).
+custo (alarme cedo), nunca subestimá-lo (luz verde falsa). Nota Windows:
+CRLF infla a contagem de bytes em ~2% a cada checkout — deriva dessa ordem
+entre manifesto e disco é esperada, não é motivo de correção.
 
 ## 7. Relatório final
 

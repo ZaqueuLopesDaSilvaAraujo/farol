@@ -1,4 +1,4 @@
-# Instalação — Farol v2.0.0
+# Instalação — Farol v2.0.1
 
 Guia de uma página. A partir da v2.0, o Farol é um **plugin do Claude Code**:
 instala uma vez, vale para todos os seus projetos, atualiza sozinho.
@@ -30,14 +30,24 @@ Dentro de qualquer sessão do Claude Code:
 ```
 
 Se os comandos `/farol:*` não aparecerem em seguida, rode `/reload-plugins`
-ou reinicie a sessão — skills de plugin são carregadas no arranque.
+ou reinicie a sessão — skills de plugin são carregadas no arranque. Nota
+para automações e agentes: `/plugin …` são comandos embutidos da interface;
+fora dela, use o CLI equivalente (`claude plugin marketplace add …`,
+`claude plugin install …`).
+
+**Custo global, dito com franqueza**: o plugin em escopo de usuário
+adiciona ~0,9k tokens a TODA sessão da máquina — inclusive em projetos que
+não usam o Farol (antes, quem não instalava não pagava). Se você tem muitos
+projetos fora do Farol, adote a prática de desativá-lo neles
+(`/plugin disable farol` / `enable`) ou avalie instalar em escopo de
+projeto.
 
 ## Caminho alternativo: instalação local (zip)
 
 Para ambientes sem acesso ao marketplace, baixe o zip da Release e:
 
 ```bash
-unzip farol-v2.0.0.zip -d ~/farol
+unzip farol-v2.0.1.zip -d ~/farol
 ```
 
 E na sessão do Claude Code: `/plugin install ~/farol`
