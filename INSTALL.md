@@ -1,4 +1,4 @@
-# Instalação — Farol v1.3.0
+# Instalação — Farol v1.3.1
 
 Guia de uma página. Tempo total: ~10 minutos (a maior parte é a
 contextualização, que roda sozinha).
@@ -33,7 +33,7 @@ sentido, roube só a ideia da tabela "Carregue quando" do template de índice
 
 ```bash
 cd /caminho/do/seu-projeto
-unzip farol-v1.3.0.zip
+unzip farol-v1.3.1.zip
 ```
 
 Isso adiciona `.claude/`, `CLAUDE.md.ccf` e documentação. Seu código não é
@@ -68,7 +68,7 @@ preenche `.claude/context/`. Ao final, o Claude pede validação de 3–5 fatos.
 ```bash
 echo ".claude/backups/" >> .gitignore
 git add .claude/ CLAUDE.md .gitignore
-git commit -m "chore: instala Farol v1.3.0 + contexto inicial"
+git commit -m "chore: instala Farol v1.3.1 + contexto inicial"
 ```
 
 Commitar: `.claude/` (agents, skills, hooks, **context/**) e `CLAUDE.md`.

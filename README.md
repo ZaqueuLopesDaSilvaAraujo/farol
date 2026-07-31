@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v1.3.0
+# Farol — v1.3.1
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*
@@ -35,6 +35,13 @@ desse caso, seja honesto consigo:
 - Projeto pequeno com documentação artesanal densa? O modo **adopt** faz o
   índice apontar para os seus docs (AGENTS.md etc.) em vez de parafraseá-los
   — e a documentação do time SEMPRE prevalece sobre o Farol em divergências.
+  O que o adopt muda é a pergunta da contextualização: de "descreva o
+  projeto" para **"o que é verdade e não está na doc"** — lacunas e
+  divergências verificadas, com fonte. Expectativa honesta (medida em
+  campo): adopt entrega fidelidade e precedência, NÃO redução de tokens; a
+  seção de princípios invioláveis é conteúdo novo que custa — e vale — seu
+  espaço. O `contextBudget` existe para vigiar esse custo, não para
+  prometer queda.
 - Documentação parcial (um README com comandos, sem regras de produto)? O
   modo **augment** aproveita o que existe e cria apenas as lacunas.
 - Dúvida pontual num arquivo? Grep responde de graça; nenhum framework de
@@ -95,3 +102,8 @@ versão: substitua `.claude/agents/fw-*` e `.claude/skills/fw-*` e siga
 4. Contextualização com orçamento duro de leitura e lista de exclusão obrigatória.
 5. Atualização incremental ancorada no commit registrado em `manifest.json`.
 6. `memory.md` com teto de 150 linhas + consolidação periódica.
+
+Nota de honestidade: esses mecanismos limitam e vigiam o custo — não
+garantem que o total caia em todo cenário. Em modo adopt sobre doc madura,
+o custo fixo pode SUBIR (princípios invioláveis, precedência) em troca de
+fidelidade; a medição fica no `contextBudget` para você decidir com números.

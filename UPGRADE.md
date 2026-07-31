@@ -27,7 +27,7 @@
 
 No `.claude/context/manifest.json`: substitua `"adopt_mode": true|false` por
 `"mode": "adopt"` (se era true) ou `"bootstrap"`/`"augment"` (conforme o
-projeto), e adicione o bloco `contextBudget` (ver template no /fw-init).
+projeto), e adicione o bloco `contextBudget` com `bytesPerToken` calibrado (ver /fw-init §6b).
 Depois rode `/fw-status` — a checagem 11 valida os obrigatórios do modo.
 
 ## Customização sem conflito

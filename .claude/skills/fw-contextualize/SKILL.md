@@ -41,7 +41,10 @@ paráfrase. Extraia dela duas coisas:
   novo e verificado (ausente dos docs). Duplicar documentação existente cria
   uma segunda fonte de verdade que apodrece: é proibido. O conteúdo
   adicional always-on deve ser mínimo — a meta é localizar a fonte, não
-  repetir o conhecimento.
+  repetir o conhecimento. Expectativa: adopt otimiza FIDELIDADE (lacunas e
+  divergências verificadas contra a doc), não tokens; princípios
+  invioláveis podem elevar o custo fixo, e isso é um trade-off legítimo a
+  reportar com números, nunca a esconder.
 - **augment** — aponte para o que a doc existente já cobre; compare-a com o
   checklist do índice (princípios, comandos, arquitetura, módulos críticos,
   convenções) para identificar LACUNAS; crie somente arquivos/seções que as
@@ -109,7 +112,8 @@ Estados de confiança (obrigatórios em todo fato registrado):
    contexto. Use SEMPRE `git hash-object` (determinístico e idêntico em
    qualquer OS — nunca sha1sum/shasum). Sem git, deixe `inventory` vazio.
 2. Meça o custo always-on: bytes de `CLAUDE.md` + `index.md` (+ imports
-   diretos); tokens ≈ bytes ÷ 4. Grave em
+   diretos); tokens ≈ bytes ÷ `bytesPerToken` do manifesto (calibrado no
+   /fw-init; pt-BR ≈ 2,6 — nunca use 4 em conteúdo acentuado). Grave em
    `contextBudget.alwaysOnEstimatedTokens` no manifesto. Acima de
    `warningThresholdTokens` → corte ANTES de finalizar (mover conteúdo para
    sob-demanda); em modo adopt, o acréscimo sobre a doc do time deve ser

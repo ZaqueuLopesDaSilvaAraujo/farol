@@ -87,13 +87,14 @@ Crie `.claude/context/manifest.json`:
 ```json
 {
   "framework": "farol",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "installed_at": "<ISO-8601>",
   "contextualized_at": null,
   "anchor_mode": "git | date",
   "mode": "adopt | augment | bootstrap",
   "contextBudget": {
     "alwaysOnEstimatedTokens": null,
+    "bytesPerToken": 3.0,
     "warningThresholdTokens": 1800,
     "hardLimitTokens": 2500
   },
@@ -101,6 +102,17 @@ Crie `.claude/context/manifest.json`:
   "inventory": {}
 }
 ```
+
+## 6b. Calibração da razão bytes/token
+
+`bytes ÷ 4` subestima idiomas acentuados (medição de campo em pt-BR:
+~2,6 bytes/token — erro de ~55%). Defina `bytesPerToken` no manifesto:
+- Melhor opção — calibrar: se existir um documento com contagem de tokens
+  conhecida (ex.: medida via `/context`), use `bytes ÷ tokens` dele.
+- Sem calibração — escolha pelo idioma dominante do contexto:
+  pt-BR/es/acentuados ≈ **2,6** · inglês ≈ **4,0** · misto/código ≈ **3,0**.
+Na dúvida, use o valor MENOR: um guarda de orçamento deve superestimar o
+custo (alarme cedo), nunca subestimá-lo (luz verde falsa).
 
 ## 7. Relatório final
 

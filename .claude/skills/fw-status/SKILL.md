@@ -39,8 +39,10 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
     alvos existentes; augment → lacunas pendentes listadas (ou zeradas);
     bootstrap → `architecture.md` e `conventions.md` existem.
 12. Orçamento de contexto: some os bytes dos arquivos always-on (CLAUDE.md +
-    index.md + imports diretos), estime tokens (bytes ÷ 4) e compare com o
-    `contextBudget` do manifesto. Acima de `warningThresholdTokens` →
+    index.md + imports diretos), estime tokens (bytes ÷ `bytesPerToken` do
+    manifesto) e compare com o `contextBudget`. Se `bytesPerToken` estiver
+    ausente ou for 4 com conteúdo em idioma acentuado, ALERTE: a estimativa
+    está inflada em ~55% a favor da luz verde — recalibre no manifesto. Acima de `warningThresholdTokens` →
     alerta com sugestão concreta de corte; acima de `hardLimitTokens` →
     ERRO.
 

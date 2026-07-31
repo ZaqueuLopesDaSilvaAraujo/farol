@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.1 — Terceiro relato de campo
+- **Razão bytes/token calibrável** (`contextBudget.bytesPerToken`): bytes ÷ 4
+  subestimava pt-BR em ~55% (medição de campo: 2,59 B/token) e o guarda dava
+  luz verde a índice no limite. Agora: calibração contra documento conhecido
+  no /fw-init, ou escolha por idioma (pt-BR ≈ 2,6 · en ≈ 4,0 · misto ≈ 3,0);
+  na dúvida, o valor MENOR — guarda superestima, nunca subestima. O
+  /fw-status alerta razão suspeita.
+- **Adopt promete fidelidade, não economia**: medido em campo, o modo adopt
+  sobre doc madura CUSTA MAIS que a paráfrase da v1.1.0 (+princípios
+  invioláveis, +precedência) e entrega em troca lacunas e divergências
+  verificadas — "o que é verdade e não está na doc". Toda a documentação
+  foi corrigida para esse argumento; a previsão anterior de "acréscimo
+  mínimo" estava errada e fica aqui registrada como tal.
+
 ## 1.3.0 — Triagem do segundo relato
 - **Modo `augment`** e seleção explícita: `/fw-init --mode
   adopt|augment|bootstrap`; sem flag, o init avalia maturidade documental
