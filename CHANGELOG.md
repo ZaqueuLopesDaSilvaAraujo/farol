@@ -1,5 +1,32 @@
 # Changelog
 
+## 1.2.0 — Relato de campo (experimento em projeto real)
+Correções derivadas do primeiro teste de campo — projeto pequeno com
+contexto artesanal denso. Obrigado ao relato: cada item abaixo veio dele.
+- **Zip corrigido**: a release 1.1.0 empacotava diretórios literais de
+  expansão de chaves (quebrava Expand-Archive no Windows). Empacotamento
+  agora é verificado programaticamente antes da release.
+- **Princípios e restrições INVIOLÁVEIS**: nova seção obrigatória no índice
+  para princípios de produto e restrições legais/compliance, com precedência
+  máxima. A contextualização os caça ativamente na Rodada 0.
+- **Precedência explícita**: documentação do time SEMPRE prevalece sobre o
+  Farol em divergências; bloco gerenciado sem H1 duplicado.
+- **Modo adopt**: com docs artesanais densos, o índice vira índice de
+  ponteiros — apontar, nunca parafrasear (segunda fonte de verdade apodrece).
+- **Detecção de stack**: recursiva (2 níveis), reconhece manifestos com
+  nomes localizados (ex.: requisitos.txt) e identifica por conteúdo;
+  subdiretório com manifesto = runtime do produto.
+- **Sem chutes no índice**: tipo de aplicação só é preenchido se inequívoco;
+  campos de comando são omitidos (nunca inventados) quando não se aplicam.
+- **fw-scout e contextualize**: presença em disco ≠ presença no repo —
+  caminhos gitignorados não sustentam afirmações sobre distribuição.
+- **fw-status**: valida todos os ponteiros do índice (ponteiro morto em
+  arquivo always-on = prioridade máxima) e a presença da seção de princípios.
+- **INSTALL.md**: instrução explícita de abrir sessão NOVA (skills são
+  descobertas no arranque) e seção "este framework é para o seu projeto?".
+- **README**: seção "Quando usar — e quando não usar", incluindo a
+  recomendação honesta de, às vezes, não usar.
+
 ## 1.1.0 — Marca
 - Projeto batizado de **Farol**; banner e social preview em `assets/`;
   LICENSE (MIT), `.gitignore` e disclaimer de não afiliação no README.

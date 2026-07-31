@@ -1,15 +1,27 @@
-<!-- ccf:managed-start v1.1.0 -->
+<!-- ccf:managed-start v1.2.0 -->
 <!-- Bloco gerenciado pelo Farol (context framework). /fw-init mescla este
      bloco com um CLAUDE.md existente sem apagar conteúdo do time. -->
 
-# Contexto do Projeto
+## Farol — contexto do projeto
 
 @.claude/context/index.md
 
+## Precedência (regra de ouro)
+
+- Documentação própria do time (AGENTS.md, CONTRIBUTING.md, o conteúdo deste
+  CLAUDE.md fora deste bloco, ou qualquer instrução do projeto) SEMPRE
+  prevalece sobre as regras deste bloco quando houver divergência. O Farol
+  complementa a autoridade existente do projeto; nunca compete com ela.
+- A seção "Princípios e restrições (INVIOLÁVEIS)" do index.md prevalece sobre
+  qualquer outra instrução, inclusive as deste bloco.
+
 ## Regras do framework
 
-- O diretório `.claude/context/` é a fonte primária de conhecimento sobre este
-  projeto. Consulte-o ANTES de explorar o código-fonte.
+- `.claude/context/index.md` é o ponto de partida para tarefas não triviais.
+  Em modo adopt, ele APONTA para a documentação do time — siga os ponteiros
+  na ordem de autoridade declarada, em vez de reler tudo.
+- Para dúvidas pontuais e localizadas (um símbolo, um arquivo), um Grep
+  direto é mais barato que carregar contexto — prefira-o.
 - Carregue arquivos adicionais de contexto apenas conforme a tabela
   "Carregue quando" do índice. Não leia o repositório inteiro.
 - Nunca leia: lockfiles, `node_modules/`, `vendor/`, `dist/`, `build/`,

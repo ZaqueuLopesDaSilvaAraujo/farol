@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v1.1.0
+# Farol — v1.2.0
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*
@@ -25,6 +25,21 @@ assistente especializado em **qualquer** projeto, separando:
 Funciona em qualquer stack (Node, Python, Java, .NET, Go, Rust, monorepos,
 CLI, mobile, Electron...) porque nenhum arquivo `fw-*` contém conhecimento
 de projeto: todo conhecimento específico é descoberto na contextualização.
+
+## Quando usar — e quando não usar
+
+O Farol resolve um problema específico: **codebase média/grande ou pouco
+documentada, onde o agente desperdiça contexto redescobrindo tudo**. Fora
+desse caso, seja honesto consigo:
+
+- Projeto pequeno com documentação artesanal densa? O modo **adopt** faz o
+  índice apontar para os seus docs (AGENTS.md etc.) em vez de parafraseá-los
+  — e a documentação do time SEMPRE prevalece sobre o Farol em divergências.
+- Dúvida pontual num arquivo? Grep responde de graça; nenhum framework de
+  contexto compete com isso, nem deve.
+- Só quer economia de tokens na doc existente? Adote apenas o padrão da
+  tabela "Carregue quando" (núcleo always-on + seções sob demanda), sem
+  instalar nada. É a melhor ideia daqui e é sua de graça.
 
 ## Instalação
 

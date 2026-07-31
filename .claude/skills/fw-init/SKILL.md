@@ -31,15 +31,26 @@ projeto em estado inconsistente se interrompido). Nunca toque em código-fonte.
 
 ## 3. Detecção rápida de stack (orçamento: só manifestos)
 
-Leia APENAS manifestos e configs na raiz (e raízes de workspaces, se
-monorepo): `package.json`, `pyproject.toml`, `requirements.txt`, `go.mod`,
-`Cargo.toml`, `pom.xml`, `build.gradle*`, `*.csproj`/`*.sln`,
-`composer.json`, `Gemfile`, `Dockerfile`, `docker-compose*`, CI. NÃO leia
-código-fonte nem lockfiles.
+Procure manifestos e configs na raiz E até 2 níveis de profundidade (fora
+das exclusões): `package.json`, `pyproject.toml`, `requirements.txt`,
+`go.mod`, `Cargo.toml`, `pom.xml`, `build.gradle*`, `*.csproj`/`*.sln`,
+`composer.json`, `Gemfile`, `Dockerfile`, `docker-compose*`, CI. Nomes não
+são universais: reconheça variantes localizadas (ex.: `requisitos.txt`) e,
+na dúvida, identifique pelo CONTEÚDO (um txt com linhas `pacote==versão` é
+um manifesto pip, seja qual for o nome). Um subdiretório com manifesto
+próprio (`sidecar/`, `api/`) é um runtime do produto — nunca o omita da
+stack. NÃO leia código-fonte nem lockfiles.
 
-Determine: linguagens, gerenciador de pacotes, frameworks, tipo de aplicação
-(API, web, desktop, mobile, lib, CLI, monorepo, microsserviços) e comandos
-prováveis de build/teste/execução (marque `(inferido)`).
+Determine: linguagens, gerenciador de pacotes, frameworks e comandos
+prováveis (marque `(inferido)`). Tipo de aplicação: preencha SOMENTE se
+inequívoco pelos manifestos; caso contrário escreva `a confirmar` — um chute
+errado no índice vale menos que uma lacuna honesta (o /fw-contextualize
+confirma na primeira rodada).
+
+Detecte também o **modo adopt**: se existir documentação artesanal com
+substância (AGENTS.md, CONTRIBUTING.md, docs de arquitetura, README denso),
+registre `"adopt_mode": true` — a contextualização vai apontar para esses
+documentos, não reescrevê-los.
 
 ## 4. Preencher o índice
 
@@ -62,10 +73,11 @@ Crie `.claude/context/manifest.json`:
 ```json
 {
   "framework": "farol",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "installed_at": "<ISO-8601>",
   "contextualized_at": null,
   "anchor_mode": "git | date",
+  "adopt_mode": false,
   "anchor_commit": null,
   "inventory": {}
 }

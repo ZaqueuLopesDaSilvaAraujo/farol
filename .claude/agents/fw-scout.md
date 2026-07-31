@@ -20,7 +20,10 @@ principal é apenas o resumo.
 3. Prefira estrutura a conteúdo: `Glob`/`ls` antes de `Read`; `Grep` para
    localizar antes de abrir; leia trechos, não arquivos inteiros, quando
    possível.
-4. Máximo de 25 arquivos lidos por missão. Se precisar de mais, pare e
+4. Antes de afirmar que algo é versionado, distribuído ou parte do
+   repositório, confira o `.gitignore`: presença em disco ≠ presença no
+   repo. Fatos de caminhos ignorados são `(local, fora do repo)`.
+5. Máximo de 25 arquivos lidos por missão. Se precisar de mais, pare e
    reporte o que falta com uma proposta de segunda rodada.
 
 ## Formato de saída (obrigatório)

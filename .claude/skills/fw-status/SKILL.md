@@ -27,6 +27,11 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
    (divergência = edição manual — legítima; apenas avise que o inventário
    será realinhado no próximo /fw-update.)
 6. Tetos: algum arquivo de contexto estourou seu limite de linhas?
+7. **Ponteiros do índice**: TODO alvo referenciado no `index.md` (tabela
+   "Carregue quando", módulos, fontes de autoridade) existe no disco?
+   Ponteiro morto num arquivo always-on é a falha de prioridade máxima
+   deste relatório — pior que ausência, porque mente com confiança.
+8. Seção "Princípios e restrições (INVIOLÁVEIS)" existe e não está vazia?
 
 ## Saída
 

@@ -5,15 +5,32 @@
 
 ## Identidade
 - **O que é**: {1 linha: propósito do sistema}
-- **Tipo**: {API | web | desktop | mobile | lib | CLI | monorepo | microsserviços}
+- **Tipo**: {API | web | desktop | mobile | lib | CLI | monorepo | microsserviços | a confirmar}
 - **Domínio**: {1 linha}
+
+## Princípios e restrições (INVIOLÁVEIS)
+<!-- Prevalecem sobre TODAS as outras instruções, inclusive as do Farol.
+     Princípios de produto ("falso positivo é pior que falso negativo"),
+     restrições legais/compliance, regras "nunca faça X". A contextualização
+     DEVE caçá-los ativamente. Se nada for encontrado, escreva:
+     "nenhum identificado — confirmar com o time" (nunca deixe em branco). -->
+- {princípio/restrição, com a fonte (doc:linha ou decisão do time)}
+
+## Fontes de autoridade
+<!-- Modo adopt: docs do time em ordem de precedência. O Farol aponta,
+     não substitui. Sem docs do time, remova esta seção. -->
+1. {ex.: AGENTS.md — regras de trabalho}
+2. {ex.: IDEIA.md — decisões de produto}
 
 ## Stack
 - Linguagem(ns): {…}  · Framework(s): {…}
 - Gerenciador de pacotes: {…} · Banco/infra: {…}
 
 ## Comandos essenciais
-<!-- marque (inferido) até verificar -->
+<!-- Marque (inferido) até verificar. Omita campos que não se aplicam —
+     NUNCA invente um comando para preencher o template. Se o projeto tem
+     regra contrária a um campo (ex.: "clone limpo roda sem install"),
+     registre A REGRA no lugar do comando. -->
 - Instalar deps: `{…}`
 - Rodar: `{…}`
 - Testar: `{…}`

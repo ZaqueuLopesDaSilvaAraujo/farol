@@ -1,4 +1,4 @@
-# Instalação — Farol v1.1.0
+# Instalação — Farol v1.2.0
 
 Guia de uma página. Tempo total: ~10 minutos (a maior parte é a
 contextualização, que roda sozinha).
@@ -9,6 +9,15 @@ Um conjunto de arquivos de configuração que o **Claude Code lê nativamente**.
 Não é um programa: nada aqui "executa" por conta própria. Ele ensina o Claude
 a conhecer o SEU projeto — arquitetura, comandos, convenções — gastando o
 mínimo de tokens e sem nunca tocar no código-fonte.
+
+## Antes de instalar: este framework é para o seu projeto?
+
+O Farol foi desenhado para projetos médios/grandes ou pouco documentados.
+Se o seu projeto é pequeno e já tem contexto artesanal denso (AGENTS.md,
+CONTRIBUTING.md caprichados), o `/fw-init` ativa o **modo adopt**: o Farol
+aponta para a sua documentação em vez de reescrevê-la. E se nem isso fizer
+sentido, roube só a ideia da tabela "Carregue quando" do template de índice
+— núcleo sempre carregado + seções sob demanda — sem instalar nada.
 
 ## Pré-requisitos
 
@@ -22,20 +31,24 @@ mínimo de tokens e sem nunca tocar no código-fonte.
 
 ```bash
 cd /caminho/do/seu-projeto
-unzip farol-v1.1.0.zip
+unzip farol-v1.2.0.zip
 ```
 
 Isso adiciona `.claude/`, `CLAUDE.md.ccf` e documentação. Seu código não é
 tocado. Já tem `CLAUDE.md` ou `.claude/` próprios? Sem problema — o passo 2
 preserva tudo com backup e mesclagem.
 
-**2. Instale**
+**2. Abra uma sessão NOVA e instale**
+
+Skills e agents são descobertos no ARRANQUE da sessão do Claude Code. Se já
+havia uma sessão aberta nessa pasta antes de extrair o zip, encerre-a — numa
+sessão antiga, `/fw-init` não existe.
 
 ```bash
 claude
 ```
 
-Dentro da sessão, digite: `/fw-init`
+Dentro da sessão nova, digite: `/fw-init`
 
 O Claude detecta a stack (lendo só manifestos), cria a estrutura de contexto,
 mescla/renomeia o `CLAUDE.md` com backup e grava o manifesto.
@@ -53,7 +66,7 @@ preenche `.claude/context/`. Ao final, o Claude pede validação de 3–5 fatos.
 ```bash
 echo ".claude/backups/" >> .gitignore
 git add .claude/ CLAUDE.md .gitignore
-git commit -m "chore: instala Farol v1.1.0 + contexto inicial"
+git commit -m "chore: instala Farol v1.2.0 + contexto inicial"
 ```
 
 Commitar: `.claude/` (agents, skills, hooks, **context/**) e `CLAUDE.md`.

@@ -23,8 +23,27 @@ verificado**, sob orçamento estrito de leitura. Nunca altere código-fonte.
   → UM arquivo exemplar por camada (um controller, um service, um teste...).
   Exemplar ensina o padrão; não é preciso ler os 40 irmãos.
 
+## Rodada 0 — documentação do time (antes de qualquer scout)
+
+Leia a documentação artesanal existente (AGENTS.md, CONTRIBUTING.md, README,
+docs/, arquivos de decisão do time). Ela é FONTE de autoridade, não alvo de
+paráfrase. Extraia dela duas coisas:
+1. **Princípios e restrições invioláveis** — princípios de produto, restrições
+   legais/compliance, regras "nunca faça X". Vão para a seção própria do
+   índice, com fonte citada. Cace-os ativamente; é a seção mais importante.
+2. **A ordem de autoridade** — quais docs mandam e em que ordem (seção
+   "Fontes de autoridade" do índice).
+
+**Modo adopt** (`adopt_mode: true` no manifesto, ou docs densos detectados):
+o índice vira um ÍNDICE DE PONTEIROS — cada seção aponta para o doc do time
+que a cobre (`ver AGENTS.md §X`), e você só ESCREVE o que for novo e
+verificado (ausente dos docs). Duplicar documentação existente cria uma
+segunda fonte de verdade que apodrece: é proibido.
+
 ## Rodadas de descoberta (missões do fw-scout)
 
+0. Confirme/corrija na primeira missão qualquer campo `a confirmar` deixado
+   pelo /fw-init (especialmente o tipo de aplicação).
 1. **Panorama**: árvore de diretórios (2 níveis), entrypoints, workspaces.
    → confirma tipo de aplicação e mapa de alto nível.
 2. **Comandos**: scripts do manifesto, Makefile/justfile, CI. Marque cada
@@ -55,9 +74,14 @@ Use os templates em `.claude/context/_templates/`:
   se um dev sênior entenderia o módulo em 5 min olhando o código, não precisa
   de arquivo). Teto: 60 linhas cada.
 
-Regras de conteúdo: fatos, não prosa; nada duplicado entre arquivos (o índice
-aponta, não repete); incertezas marcadas como `(inferido)`; nunca colar
-documentação de dependências.
+Regras de conteúdo: fatos, não prosa; nada duplicado entre arquivos NEM com
+docs do time (apontar > repetir); incertezas marcadas como `(inferido)`;
+nunca colar documentação de dependências. Caminhos listados no `.gitignore`
+não sustentam afirmações sobre o repositório ou distribuição — presença em
+disco ≠ presença no repo; marque fatos desses caminhos como `(local, fora
+do repo)`. Nunca deixe o índice apontar para um arquivo que você não criou:
+ao final, verifique cada alvo da tabela "Carregue quando" e da lista de
+módulos.
 
 ## Finalização
 
