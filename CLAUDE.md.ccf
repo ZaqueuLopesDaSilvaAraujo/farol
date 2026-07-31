@@ -1,5 +1,5 @@
-<!-- ccf:managed-start v1.3.1 -->
-<!-- Bloco gerenciado pelo Farol (context framework). /fw-init mescla este
+<!-- ccf:managed-start v2.0.0 -->
+<!-- Bloco gerenciado pelo Farol (context framework). /farol:init mescla este
      bloco com um CLAUDE.md existente sem apagar conteúdo do time. -->
 
 ## Farol — contexto do projeto
@@ -33,8 +33,8 @@
 - Ao aprender um fato permanente sobre o projeto (comando, convenção, pegadinha),
   registre-o em `.claude/context/memory.md` (1 linha, seção correta). Nunca
   registre informação temporária.
-- Se `/fw-status` ou o manifesto indicarem contexto desatualizado (muitos commits
-  desde a âncora), sugira `/fw-update` antes de tarefas grandes.
+- Se `/farol:status` ou o manifesto indicarem contexto desatualizado (muitos commits
+  desde a âncora), sugira `/farol:update` antes de tarefas grandes.
 
 ## Segurança (inegociável)
 

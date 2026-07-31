@@ -1,13 +1,13 @@
 ---
-name: fw-init
+name: init
 description: >
   Instala o Claude Context Framework: cria estrutura de contexto, detecta
   stack, preserva arquivos existentes com backup. Invocado pelo usuário com
-  /fw-init. Nunca modifica código-fonte.
+  /farol:init. Nunca modifica código-fonte.
 disable-model-invocation: true
 ---
 
-# /fw-init — Instalador do framework
+# /farol:init — Instalador do framework
 
 Execute na ordem (alvos antes de referências: nenhum passo pode deixar o
 projeto em estado inconsistente se interrompido). Nunca toque em código-fonte.
@@ -19,14 +19,17 @@ projeto em estado inconsistente se interrompido). Nunca toque em código-fonte.
   `anchor_mode`: `"git"` (ideal) ou `"date"` (degradado; avise que a
   atualização incremental fica limitada — recomende `git init`).
 - Se `.claude/context/manifest.json` já existe: framework instalado. Informe
-  a versão e pare (sugira /fw-update ou UPGRADE.md).
+  a versão e pare (sugira /farol:update ou UPGRADE.md).
 
 ## 2. Estrutura e índice-stub (antes de qualquer referência a eles)
 
+- Copie os templates do plugin (`${CLAUDE_PLUGIN_ROOT}/templates/`) para
+  `.claude/context/_templates/` do projeto — cópia local permite ao time
+  customizá-los; o /farol:contextualize sempre usa a cópia do projeto.
 - Crie (se ausentes): `.claude/context/{modules,decisions}/` e
   `.claude/context/memory.md` a partir de `_templates/memory.md`.
 - Crie `.claude/context/index.md` a partir de `_templates/index.md` com as
-  seções em `_(pendente: /fw-contextualize)_`. Existir vazio > não existir:
+  seções em `_(pendente: /farol:contextualize)_`. Existir vazio > não existir:
   o import do CLAUDE.md jamais aponta para arquivo inexistente.
 
 ## 3. Detecção rápida de stack (orçamento: só manifestos)
@@ -44,12 +47,12 @@ stack. NÃO leia código-fonte nem lockfiles.
 Determine: linguagens, gerenciador de pacotes, frameworks e comandos
 prováveis (marque `(inferido)`). Tipo de aplicação: preencha SOMENTE se
 inequívoco pelos manifestos; caso contrário escreva `a confirmar` — um chute
-errado no índice vale menos que uma lacuna honesta (o /fw-contextualize
+errado no índice vale menos que uma lacuna honesta (o /farol:contextualize
 confirma na primeira rodada).
 
 ## 3b. Seleção do modo (adopt | augment | bootstrap)
 
-O usuário pode fixar o modo: `/fw-init --mode adopt|augment|bootstrap`.
+O usuário pode fixar o modo: `/farol:init --mode adopt|augment|bootstrap`.
 Sem `--mode`, avalie a maturidade documental por sinais objetivos —
 presença E substância de: AGENTS.md/CLAUDE.md, CONTRIBUTING.md, docs de
 arquitetura, registros de decisão, princípios de produto, comandos
@@ -69,15 +72,17 @@ silêncio. Registre o modo no manifesto.
 ## 4. Preencher o índice
 
 Atualize `index.md` com o que a detecção descobriu; mantenha
-`_(pendente: /fw-contextualize)_` no que faltar.
+`_(pendente: /farol:contextualize)_` no que faltar.
 
 ## 5. CLAUDE.md (backup e mesclagem)
 
 - Se existir `CLAUDE.md`: copie para `.claude/backups/CLAUDE.md.<data>`.
   Depois MESCLE: preserve todo o conteúdo do time e acrescente o bloco entre
-  `ccf:managed-start` e `ccf:managed-end` de `CLAUDE.md.ccf` (se o bloco já
-  existir, substitua apenas o bloco).
-- Se não existir: renomeie `CLAUDE.md.ccf` para `CLAUDE.md`.
+  `ccf:managed-start` e `ccf:managed-end` de
+  `${CLAUDE_PLUGIN_ROOT}/CLAUDE.md.ccf` (se o bloco já existir, substitua
+  apenas o bloco).
+- Se não existir: crie `CLAUDE.md` copiando
+  `${CLAUDE_PLUGIN_ROOT}/CLAUDE.md.ccf`.
 - Jamais sobrescreva arquivos preexistentes em `.claude/context/`.
 
 ## 6. Manifesto
@@ -87,7 +92,7 @@ Crie `.claude/context/manifest.json`:
 ```json
 {
   "framework": "farol",
-  "version": "1.3.1",
+  "version": "2.0.0",
   "installed_at": "<ISO-8601>",
   "contextualized_at": null,
   "anchor_mode": "git | date",
@@ -117,7 +122,7 @@ custo (alarme cedo), nunca subestimá-lo (luz verde falsa).
 ## 7. Relatório final
 
 Até 15 linhas: criado, preservado/backupeado, stack detectada, `anchor_mode`,
-modo selecionado ou recomendado (com o porquê), e o próximo passo: **`/fw-contextualize`**. Ofereça (sem ativar sem
+modo selecionado ou recomendado (com o porquê), e o próximo passo: **`/farol:contextualize`**. Ofereça (sem ativar sem
 confirmação) os hooks opcionais de `.claude/hooks/README.md`. Sugira ao
 usuário adicionar `.claude/backups/` ao `.gitignore` e commitar `.claude/` +
 `CLAUDE.md` (ver INSTALL.md, passo 4) — sem executar comandos git por ele.

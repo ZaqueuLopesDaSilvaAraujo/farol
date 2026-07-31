@@ -1,97 +1,85 @@
-# Instalação — Farol v1.3.1
+# Instalação — Farol v2.0.0
 
-Guia de uma página. Tempo total: ~10 minutos (a maior parte é a
-contextualização, que roda sozinha).
+Guia de uma página. A partir da v2.0, o Farol é um **plugin do Claude Code**:
+instala uma vez, vale para todos os seus projetos, atualiza sozinho.
 
 ## O que é (em 3 linhas)
 
-Um conjunto de arquivos de configuração que o **Claude Code lê nativamente**.
-Não é um programa: nada aqui "executa" por conta própria. Ele ensina o Claude
-a conhecer o SEU projeto — arquitetura, comandos, convenções — gastando o
-mínimo de tokens e sem nunca tocar no código-fonte.
+Um plugin que ensina o Claude Code a conhecer o SEU projeto — arquitetura,
+comandos, princípios, restrições — gastando o mínimo de tokens e sem nunca
+tocar no código-fonte. A inteligência (skills e agents) mora no plugin; o
+conhecimento de cada projeto mora em `.claude/context/`, que é seu.
 
 ## Antes de instalar: este framework é para o seu projeto?
 
-O Farol foi desenhado para projetos médios/grandes ou pouco documentados.
-O `/fw-init` avalia a maturidade da sua documentação e recomenda um modo:
-**adopt** (doc madura → o Farol aponta para ela, nunca a reescreve),
-**augment** (doc parcial → preenche só as lacunas) ou **bootstrap** (sem doc
-→ constrói o contexto). Você também pode fixar:
-`/fw-init --mode adopt|augment|bootstrap`. E se nem isso fizer
-sentido, roube só a ideia da tabela "Carregue quando" do template de índice
-— núcleo sempre carregado + seções sob demanda — sem instalar nada.
+O `/farol:init` avalia a maturidade da sua documentação e recomenda um modo:
+**adopt** (doc madura → o Farol aponta para ela e caça o que é verdade e não
+está escrito), **augment** (doc parcial → preenche só as lacunas) ou
+**bootstrap** (sem doc → constrói o contexto). Você pode fixar:
+`/farol:init --mode adopt|augment|bootstrap`. E se nada disso fizer sentido
+para o seu caso, roube só a ideia da tabela "Carregue quando" do template de
+índice — núcleo sempre carregado + seções sob demanda — sem instalar nada.
 
-## Pré-requisitos
+## Caminho recomendado: marketplace (2 comandos)
 
-- Claude Code instalado (https://docs.claude.com/en/docs/claude-code/overview)
-- Projeto em um repositório git (recomendado; sem git funciona, mas perde a
-  atualização incremental)
+Dentro de qualquer sessão do Claude Code:
 
-## Passos
-
-**1. Extraia o zip na raiz do projeto**
-
-```bash
-cd /caminho/do/seu-projeto
-unzip farol-v1.3.1.zip
+```
+/plugin marketplace add ZaqueuLopesDaSilvaAraujo/farol
+/plugin install farol@farol
 ```
 
-Isso adiciona `.claude/`, `CLAUDE.md.ccf` e documentação. Seu código não é
-tocado. Já tem `CLAUDE.md` ou `.claude/` próprios? Sem problema — o passo 2
-preserva tudo com backup e mesclagem.
+Se os comandos `/farol:*` não aparecerem em seguida, rode `/reload-plugins`
+ou reinicie a sessão — skills de plugin são carregadas no arranque.
 
-**2. Abra uma sessão NOVA e instale**
+## Caminho alternativo: instalação local (zip)
 
-Skills e agents são descobertos no ARRANQUE da sessão do Claude Code. Se já
-havia uma sessão aberta nessa pasta antes de extrair o zip, encerre-a — numa
-sessão antiga, `/fw-init` não existe.
+Para ambientes sem acesso ao marketplace, baixe o zip da Release e:
 
 ```bash
-claude
+unzip farol-v2.0.0.zip -d ~/farol
 ```
 
-Dentro da sessão nova, digite: `/fw-init`
+E na sessão do Claude Code: `/plugin install ~/farol`
 
-O Claude detecta a stack (lendo só manifestos), cria a estrutura de contexto,
-mescla/renomeia o `CLAUDE.md` com backup e grava o manifesto.
+(Extraia FORA dos seus projetos — o plugin não vive mais na raiz do projeto.)
 
-**3. Contextualize**
+## Primeiro uso em cada projeto
 
-Digite: `/fw-contextualize`
+Abra o Claude Code na raiz do projeto e rode:
 
-O subagent `fw-scout` explora o projeto em rodadas com orçamento de leitura e
-preenche `.claude/context/`. Ao final, o Claude pede validação de 3–5 fatos.
-**Valide com atenção** — é o momento mais barato de corrigir um erro.
+1. `/farol:init` — detecta stack e maturidade documental, recomenda o modo,
+   cria `.claude/context/` e mescla o `CLAUDE.md` com backup.
+2. `/farol:contextualize` — descobre (ou aponta e caça lacunas, conforme o
+   modo) e preenche o contexto. Valide os 3–5 fatos-chave que ele apresentar.
 
-**4. Suba no git (é assim que o time inteiro herda o contexto)**
+## Suba o contexto no git (é assim que o time inteiro herda)
 
 ```bash
 echo ".claude/backups/" >> .gitignore
 git add .claude/ CLAUDE.md .gitignore
-git commit -m "chore: instala Farol v1.3.1 + contexto inicial"
+git commit -m "chore: contexto do projeto via Farol v2"
 ```
 
-Commitar: `.claude/` (agents, skills, hooks, **context/**) e `CLAUDE.md`.
-Ignorar: apenas `.claude/backups/`. O `.claude/context/` é o ativo mais
-valioso — versionado, ele evolui por PR como qualquer código.
+O plugin em si NÃO vai para o repositório do projeto — cada dev instala o
+plugin uma vez na própria máquina (2 comandos acima). O que se versiona é o
+`.claude/context/` e o `CLAUDE.md`: o conhecimento, não a ferramenta.
 
-**5. (Opcional, recomendado) Ative o guardrail de segurança**
+## (Opcional) Guardrail de segurança
 
-Siga `.claude/hooks/README.md` (2 minutos: `chmod +x` + bloco no
-`settings.json`). Bloqueia deterministicamente `git push`, `rm -rf`, `DROP
-TABLE` etc. Windows: requer Git Bash ou WSL.
+Siga `hooks/README.md` do plugin: copiar o `fw-guard.sh` para o projeto e
+registrar no `settings.json`. É opt-in por projeto, de propósito — um plugin
+que bloqueia `git push` globalmente de surpresa seria exatamente o tipo de
+comportamento que o Farol condena.
 
-## Pronto — uso no dia a dia
-
-Não há nada para invocar: toda sessão do Claude Code nesta pasta já carrega o
-contexto automaticamente. Os comandos abaixo são só manutenção:
+## Dia a dia
 
 | Quando | Comando |
 |---|---|
-| Depois de mudanças grandes no projeto | `/fw-update` |
-| Quer checar se o contexto está em dia | `/fw-status` |
-| Tomaram uma decisão técnica que vale registrar | `/fw-decision "título"` |
-| `memory.md` passou de 150 linhas | `/fw-consolidate` |
+| Depois de mudanças grandes no projeto | `/farol:update` |
+| Checar saúde, ponteiros e orçamento de contexto | `/farol:status` |
+| Registrar uma decisão técnica | `/farol:decision "título"` |
+| `memory.md` passou de 150 linhas | `/farol:consolidate` |
 
-Dúvidas de arquitetura e filosofia: `README.md`. Atualização de versão do
-framework: `UPGRADE.md`.
+Atualização do plugin: `/plugin` → aba do marketplace → update (ou reinstale
+pelo mesmo comando). Migração da 1.x: `UPGRADE.md`.

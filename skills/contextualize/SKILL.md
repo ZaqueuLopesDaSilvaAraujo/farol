@@ -1,14 +1,14 @@
 ---
-name: fw-contextualize
+name: contextualize
 description: >
   Contextualiza o projeto: descobre stack, arquitetura, módulos, comandos,
   integrações, convenções e riscos, e preenche .claude/context/ lendo o
-  mínimo necessário. Invocado explicitamente pelo usuário com /fw-contextualize
-  após /fw-init. Nunca altera código-fonte.
+  mínimo necessário. Invocado explicitamente pelo usuário com /farol:contextualize
+  após /farol:init. Nunca altera código-fonte.
 disable-model-invocation: true
 ---
 
-# /fw-contextualize — Contextualização do projeto
+# /farol:contextualize — Contextualização do projeto
 
 Objetivo: preencher `.claude/context/` com conhecimento **permanente e
 verificado**, sob orçamento estrito de leitura. Nunca altere código-fonte.
@@ -56,7 +56,7 @@ paráfrase. Extraia dela duas coisas:
 ## Rodadas de descoberta (missões do fw-scout)
 
 0. Confirme/corrija na primeira missão qualquer campo `a confirmar` deixado
-   pelo /fw-init (especialmente o tipo de aplicação).
+   pelo /farol:init (especialmente o tipo de aplicação).
 1. **Panorama**: árvore de diretórios (2 níveis), entrypoints, workspaces.
    → confirma tipo de aplicação e mapa de alto nível.
 2. **Comandos**: scripts do manifesto, Makefile/justfile, CI. Marque cada
@@ -113,7 +113,7 @@ Estados de confiança (obrigatórios em todo fato registrado):
    qualquer OS — nunca sha1sum/shasum). Sem git, deixe `inventory` vazio.
 2. Meça o custo always-on: bytes de `CLAUDE.md` + `index.md` (+ imports
    diretos); tokens ≈ bytes ÷ `bytesPerToken` do manifesto (calibrado no
-   /fw-init; pt-BR ≈ 2,6 — nunca use 4 em conteúdo acentuado). Grave em
+   /farol:init; pt-BR ≈ 2,6 — nunca use 4 em conteúdo acentuado). Grave em
    `contextBudget.alwaysOnEstimatedTokens` no manifesto. Acima de
    `warningThresholdTokens` → corte ANTES de finalizar (mover conteúdo para
    sob-demanda); em modo adopt, o acréscimo sobre a doc do time deve ser
@@ -122,5 +122,5 @@ Estados de confiança (obrigatórios em todo fato registrado):
    arquitetura). Corrija o que ele apontar.
 4. Relatório final em até 15 linhas: modo executado; o que foi documentado
    (em augment: coberto × criado × pendente); custo always-on antes/depois
-   vs orçamento; incertezas restantes; lembrete de `/fw-update` após
+   vs orçamento; incertezas restantes; lembrete de `/farol:update` após
    mudanças relevantes.

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2.0.0 — Plugin do Claude Code (breaking)
+- **Distribuição por plugin**: instala com 2 comandos
+  (`/plugin marketplace add ZaqueuLopesDaSilvaAraujo/farol` +
+  `/plugin install farol@farol`), vale para todos os projetos da máquina e
+  atualiza nativamente. O conceito fundador vira infraestrutura:
+  inteligência no plugin (uma vez), contexto em cada projeto.
+- **BREAKING — comandos renomeados**: `/fw-<skill>` → `/farol:<skill>`; o
+  namespace do plugin absorve o antigo prefixo. Agents mantêm os nomes
+  (`fw-scout`, `fw-reviewer`, `fw-debugger`).
+- **BREAKING — layout**: `skills/`, `agents/`, `hooks/`, `templates/` na
+  raiz do plugin; o zip vira instalação LOCAL de plugin
+  (`/plugin install ~/farol`), não mais extração na raiz do projeto.
+- Templates copiados para `.claude/context/_templates/` do projeto no
+  `/farol:init` (customizáveis pelo time); fontes via `${CLAUDE_PLUGIN_ROOT}`.
+- Hooks de segurança seguem **opt-in por projeto** — o plugin não os
+  auto-ativa, de propósito.
+- Migração da 1.x em `UPGRADE.md`.
+
 ## 1.3.1 — Terceiro relato de campo
 - **Razão bytes/token calibrável** (`contextBudget.bytesPerToken`): bytes ÷ 4
   subestimava pt-BR em ~55% (medição de campo: 2,59 B/token) e o guarda dava

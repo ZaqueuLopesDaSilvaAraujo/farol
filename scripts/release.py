@@ -13,12 +13,12 @@ EXCLUDE_DIRS = {".git", "__pycache__", "node_modules"}
 REQUIRED = [
     "VERSION", "README.md", "INSTALL.md", "CHANGELOG.md", "UPGRADE.md",
     "LICENSE", "CLAUDE.md.ccf",
-    ".claude/agents/fw-scout.md", ".claude/agents/fw-reviewer.md",
-    ".claude/agents/fw-debugger.md",
-    ".claude/skills/fw-init/SKILL.md", ".claude/skills/fw-contextualize/SKILL.md",
-    ".claude/skills/fw-update/SKILL.md", ".claude/skills/fw-consolidate/SKILL.md",
-    ".claude/skills/fw-decision/SKILL.md", ".claude/skills/fw-status/SKILL.md",
-    ".claude/context/_templates/index.md", ".claude/hooks/fw-guard.sh",
+    ".claude-plugin/plugin.json", ".claude-plugin/marketplace.json",
+    "agents/fw-scout.md", "agents/fw-reviewer.md", "agents/fw-debugger.md",
+    "skills/init/SKILL.md", "skills/contextualize/SKILL.md",
+    "skills/update/SKILL.md", "skills/consolidate/SKILL.md",
+    "skills/decision/SKILL.md", "skills/status/SKILL.md",
+    "templates/index.md", "hooks/fw-guard.sh",
     "assets/banner.png", "scripts/release.py", "tests/PROTOCOL.md",
 ]
 

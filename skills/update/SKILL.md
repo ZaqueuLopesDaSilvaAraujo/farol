@@ -1,14 +1,14 @@
 ---
-name: fw-update
+name: update
 description: >
   Atualiza o contexto do projeto de forma incremental, lendo apenas o que
   mudou desde a última contextualização (ancorado em git). Use quando o
-  usuário pedir /fw-update, ou sugira quando /fw-status indicar contexto
+  usuário pedir /farol:update, ou sugira quando /farol:status indicar contexto
   desatualizado. Nunca reconstrói do zero, nunca altera código.
 disable-model-invocation: true
 ---
 
-# /fw-update — Atualização incremental do contexto
+# /farol:update — Atualização incremental do contexto
 
 Princípio: o git diz o que mudou; só isso é revisitado. Conhecimento anterior
 é preservado — atualização é cirurgia, não reconstrução.
@@ -16,7 +16,7 @@ Princípio: o git diz o que mudou; só isso é revisitado. Conhecimento anterior
 ## Procedimento
 
 1. Leia o manifesto (`.claude/context/manifest.json`).
-   - `contextualized_at` nulo → pare e instrua rodar `/fw-contextualize`.
+   - `contextualized_at` nulo → pare e instrua rodar `/farol:contextualize`.
    - `anchor_mode` = "date" (projeto sem git) → incremental por diff é
      impossível: pergunte ao usuário QUAIS áreas mudaram e despache missões
      do fw-scout restritas a elas; pule os passos 2–3.
@@ -34,7 +34,7 @@ Princípio: o git diz o que mudou; só isso é revisitado. Conhecimento anterior
 5. Aplique edições mínimas nos arquivos de contexto afetados (respeitando os
    tetos de linhas). Nunca apague seções válidas; se algo deixou de existir,
    remova a linha correspondente e, se a remoção tiver justificativa
-   relevante, registre via /fw-decision.
+   relevante, registre via /farol:decision.
 6. Atualize `manifest.json`: nova `anchor_commit` (se `anchor_mode` = "git"),
    `contextualized_at`, e hashes do `inventory` para os arquivos alterados —
    sempre via `git hash-object` (nunca sha1sum/shasum).

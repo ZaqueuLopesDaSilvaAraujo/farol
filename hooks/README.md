@@ -14,13 +14,13 @@ merecem garantia mecânica; todo o resto fica declarativo de propósito:
 NÃO usamos hooks para injetar contexto de projeto (redundante com o índice
 always-on) nem para atualizar memória automaticamente (mudança silenciosa em
 base de conhecimento é corrupção difícil de detectar; preferimos as skills
-explícitas /fw-update e /fw-consolidate).
+explícitas /farol:update e /farol:consolidate).
 
 ## fw-guard.sh (opcional — requer bash; Windows: Git Bash/WSL)
 
 - Analisa APENAS `tool_input.command` (via `jq`, ou `python3`, ou fallback
   bruto). Instale `jq` para precisão máxima.
-- Exceções do time: `.claude/hooks/fw-guard-allow` (1 regex por linha).
+- Exceções do time: `fw-guard-allow` ao lado do script copiado (1 regex por linha).
   Esse arquivo é do TIME e sobrevive a upgrades — nunca edite o script.
 - Comando bloqueado + autorização do usuário = o usuário executa manualmente
   ou adiciona exceção. O hook não tem como saber o que foi autorizado na
@@ -29,6 +29,10 @@ explícitas /fw-update e /fw-consolidate).
 
 ## Ativação
 
+0. Copie `fw-guard.sh` e `fw-guard-allow` (e, se quiser, `fw-freshness.sh`)
+   de `${CLAUDE_PLUGIN_ROOT}/hooks/` para `.claude/hooks/` do PROJETO —
+   hooks de segurança devem ser opt-in por projeto, nunca globais; por isso
+   o plugin NÃO os auto-ativa via hooks.json.
 1. `chmod +x .claude/hooks/fw-guard.sh .claude/hooks/fw-freshness.sh`
 2. Mescle em `.claude/settings.json`:
 

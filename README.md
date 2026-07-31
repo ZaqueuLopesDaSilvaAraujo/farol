@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v1.3.1
+# Farol — v2.0.0
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*
@@ -50,26 +50,29 @@ desse caso, seja honesto consigo:
   tabela "Carregue quando" (núcleo always-on + seções sob demanda), sem
   instalar nada. É a melhor ideia daqui e é sua de graça.
 
-## Instalação
+## Instalação (plugin — 2 comandos)
 
-1. Copie o conteúdo deste diretório para a raiz do projeto
-   (o diretório `.claude/` e o arquivo `CLAUDE.md.ccf`).
-2. Abra o Claude Code na raiz do projeto e execute: `/fw-init`
-3. Em seguida execute: `/fw-contextualize`
+```
+/plugin marketplace add ZaqueuLopesDaSilvaAraujo/farol
+/plugin install farol@farol
+```
 
-Pronto. Todas as conversas futuras usam `.claude/context/` como fonte
-primária de conhecimento, com carga mínima de tokens.
+Depois, em cada projeto: `/farol:init` → `/farol:contextualize`. Detalhes,
+instalação local por zip e migração da 1.x: `INSTALL.md` e `UPGRADE.md`.
+A inteligência (skills e agents) mora no plugin, instalada uma vez por
+máquina; o conhecimento de cada projeto mora em `.claude/context/`,
+versionado junto com ele.
 
 ## Comandos
 
 | Comando | Função |
 |---|---|
-| `/fw-init [--mode adopt\|augment\|bootstrap]` | Instala, detecta stack e maturidade documental, recomenda o modo, preserva arquivos com backup |
-| `/fw-contextualize` | Descobre arquitetura, módulos, comandos e convenções e preenche o contexto |
-| `/fw-update` | Atualização incremental do contexto (ancorada em `git diff`) |
-| `/fw-consolidate` | Consolida a memória: deduplica, promove decisões, remove efêmeros |
-| `/fw-decision "título"` | Registra uma decisão arquitetural (ADR curto) |
-| `/fw-status` | Verifica frescor e saúde do contexto |
+| `/farol:init [--mode adopt\|augment\|bootstrap]` | Instala, detecta stack e maturidade documental, recomenda o modo, preserva arquivos com backup |
+| `/farol:contextualize` | Descobre arquitetura, módulos, comandos e convenções e preenche o contexto |
+| `/farol:update` | Atualização incremental do contexto (ancorada em `git diff`) |
+| `/farol:consolidate` | Consolida a memória: deduplica, promove decisões, remove efêmeros |
+| `/farol:decision "título"` | Registra uma decisão arquitetural (ADR curto) |
+| `/farol:status` | Verifica frescor e saúde do contexto |
 
 ## Subagents
 
@@ -90,9 +93,9 @@ deterministicamente comandos destrutivos. Veja `.claude/hooks/README.md`.
 
 ## Atualização do framework
 
-Tudo que é do framework tem prefixo `fw-`. Para atualizar para uma nova
-versão: substitua `.claude/agents/fw-*` e `.claude/skills/fw-*` e siga
-`UPGRADE.md`. **Nunca** substitua `.claude/context/` — ele é seu.
+Nativa do Claude Code: `/plugin` → marketplace `farol` → update. A
+atualização do plugin nunca toca no seu projeto; `.claude/context/` é seu.
+Migrações de esquema, quando existirem, ficam em `UPGRADE.md`.
 
 ## Economia de tokens (mecanismos)
 

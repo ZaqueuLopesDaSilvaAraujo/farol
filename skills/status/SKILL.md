@@ -1,31 +1,31 @@
 ---
-name: fw-status
+name: status
 description: >
   Verifica a saúde do framework e o frescor do contexto: idade da âncora,
   commits acumulados, tamanho da memória, integridade dos arquivos. Use
-  quando o usuário pedir /fw-status ou no início de tarefas grandes se houver
+  quando o usuário pedir /farol:status ou no início de tarefas grandes se houver
   suspeita de contexto desatualizado.
 ---
 
-# /fw-status — Saúde do contexto
+# /farol:status — Saúde do contexto
 
 Somente leitura. Sem missões de scout, sem leitura de código-fonte.
 
 ## Verificações
 
-1. `manifest.json` existe e é válido? (não → sugerir /fw-init)
-2. `contextualized_at` nulo? (sim → sugerir /fw-contextualize)
+1. `manifest.json` existe e é válido? (não → sugerir /farol:init)
+2. `contextualized_at` nulo? (sim → sugerir /farol:contextualize)
 3. Distância da âncora:
    - `anchor_mode` = "date" → reporte idade em dias e a limitação (sem git,
-     sem incremental por diff); 30+ dias → recomendar /fw-update guiado.
+     sem incremental por diff); 30+ dias → recomendar /farol:update guiado.
    - `anchor_mode` = "git" → `git rev-list --count <anchor_commit>..HEAD`:
-     0 → em dia · 1–19 → ok · 20+ → recomendar /fw-update. Âncora
-     inexistente (rebase) → avisar; /fw-update resolve via fallback por data.
-4. `memory.md`: linhas > 150 → recomendar /fw-consolidate.
+     0 → em dia · 1–19 → ok · 20+ → recomendar /farol:update. Âncora
+     inexistente (rebase) → avisar; /farol:update resolve via fallback por data.
+4. `memory.md`: linhas > 150 → recomendar /farol:consolidate.
 5. Integridade: arquivos do `inventory` existem? Hash bate?
    Compare com `git hash-object <arquivo>` (mesmo método da escrita).
    (divergência = edição manual — legítima; apenas avise que o inventário
-   será realinhado no próximo /fw-update.)
+   será realinhado no próximo /farol:update.)
 6. Tetos: algum arquivo de contexto estourou seu limite de linhas?
 7. **Ponteiros do índice**: TODO alvo referenciado no `index.md` (tabela
    "Carregue quando", módulos, fontes de autoridade) existe no disco?
@@ -34,7 +34,8 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
 8. Seção "Princípios e restrições (INVIOLÁVEIS)" existe e não está vazia?
 9. Bloco gerenciado: marcadores `ccf:managed-start`/`ccf:managed-end`
    presentes e únicos no CLAUDE.md?
-10. Recursos instalados: os 3 agents e as 6 skills `fw-*` existem no disco?
+10. Recursos instalados: o plugin `farol` está ativo (as skills `/farol:*`
+    respondem) e os 3 agents `fw-*` aparecem entre os agents disponíveis?
 11. Obrigatórios por modo: adopt → "Fontes de autoridade" preenchida com
     alvos existentes; augment → lacunas pendentes listadas (ou zeradas);
     bootstrap → `architecture.md` e `conventions.md` existem.

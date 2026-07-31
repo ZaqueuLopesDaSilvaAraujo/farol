@@ -1,13 +1,13 @@
 ---
-name: fw-decision
+name: decision
 description: >
   Registra uma decisão arquitetural ou técnica como ADR curto em
-  .claude/context/decisions/. Use quando o usuário pedir /fw-decision, ou
+  .claude/context/decisions/. Use quando o usuário pedir /farol:decision, ou
   sugira ao final de discussões em que uma decisão com trade-offs foi tomada
   nesta conversa.
 ---
 
-# /fw-decision — Registro de decisão (ADR)
+# /farol:decision — Registro de decisão (ADR)
 
 ADRs guardam o **porquê** — a categoria de conhecimento mais cara de perder e
 a única que o código não consegue expressar. São append-only: nunca edite um

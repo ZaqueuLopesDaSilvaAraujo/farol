@@ -1,54 +1,44 @@
-# Atualização do framework
+# Atualização e migração
 
-## Modelo de propriedade (a regra que torna upgrades seguros)
+## Era do plugin (v2.0+)
 
-| Área | Dono | Em upgrade |
+Atualizar o Farol é operação nativa do Claude Code: `/plugin` → marketplace
+`farol` → update. Nada no seu projeto é tocado pela atualização do plugin.
+
+## Modelo de propriedade
+
+| Área | Dono | Em atualização |
 |---|---|---|
-| `.claude/agents/fw-*` | Framework | Substituir |
-| `.claude/skills/fw-*` | Framework | Substituir |
-| `.claude/hooks/fw-*` | Framework | Substituir (preserve seus BLOCK_PATTERNS customizados) |
-| `.claude/context/_templates/` | Framework | Substituir |
-| Bloco `ccf:managed-*` no CLAUDE.md | Framework | Substituir só o bloco |
-| `.claude/context/**` (exceto `_templates`) | **Time** | **Nunca tocar** |
-| CLAUDE.md fora do bloco gerenciado | **Time** | **Nunca tocar** |
-| Agents/skills do time (sem prefixo `fw-`) | **Time** | **Nunca tocar** |
+| Plugin (skills, agents, hooks, templates-fonte) | Framework | Atualizado via /plugin |
+| `.claude/context/**` do projeto | **Time** | **Nunca tocado** |
+| `.claude/context/_templates/` do projeto | Time (cópia customizável) | Só substituída se você rodar /farol:init de novo e aceitar |
+| CLAUDE.md fora do bloco `ccf:managed-*` | **Time** | **Nunca tocado** |
+| Bloco `ccf:managed-*` | Framework | Atualizado só pelo /farol:init, com backup |
+| Hooks copiados para `.claude/hooks/` + `fw-guard-allow` | Time (opt-in) | Nunca tocados; recopie do plugin se quiser a versão nova |
 
-## Procedimento de upgrade (v1 → vN)
+## Migração 1.x → 2.0
 
-1. Leia o `CHANGELOG` da nova versão; verifique se há passos de migração de
-   formato de contexto (raros; quando existirem, virão como skill
-   `/fw-migrate` na própria versão nova).
-2. Substitua os arquivos das quatro primeiras linhas da tabela.
-3. Substitua apenas o bloco `ccf:managed-start … ccf:managed-end` do CLAUDE.md.
-4. Atualize `"version"` no `.claude/context/manifest.json`.
-5. Rode `/fw-status` para validar integridade.
+1. Instale o plugin (2 comandos — ver INSTALL.md).
+2. Em cada projeto que usava o zip da 1.x, remova a cópia embutida do
+   framework: `.claude/skills/fw-*`, `.claude/agents/fw-*` e, se não
+   customizou, `.claude/hooks/fw-*`. **NÃO remova** `.claude/context/` nem o
+   CLAUDE.md — são seus.
+3. Os comandos mudaram de nome: `/fw-<skill>` → `/farol:<skill>`
+   (ex.: `/fw-status` → `/farol:status`). Os agents mantêm os nomes
+   (`fw-scout`, `fw-reviewer`, `fw-debugger`).
+4. Rode `/farol:status` — ele valida manifesto, bloco gerenciado e ponteiros.
+5. Manifesto: se vier da 1.2.x, aplique também a migração abaixo.
 
-## Migração 1.2.x → 1.3.0
+## Migração 1.2.x → 1.3.x (manifesto)
 
 No `.claude/context/manifest.json`: substitua `"adopt_mode": true|false` por
-`"mode": "adopt"` (se era true) ou `"bootstrap"`/`"augment"` (conforme o
-projeto), e adicione o bloco `contextBudget` com `bytesPerToken` calibrado (ver /fw-init §6b).
-Depois rode `/fw-status` — a checagem 11 valida os obrigatórios do modo.
+`"mode": "adopt"` (se era true) ou `"bootstrap"`/`"augment"`, e adicione o
+bloco `contextBudget` com `bytesPerToken` calibrado (ver /farol:init §6b).
 
 ## Customização sem conflito
 
-Precisa de um agente/skill próprio do time? Crie **sem** o prefixo `fw-`
-(ex.: `.claude/agents/dba.md`, `.claude/skills/deploy/`). Precisa mudar o
-comportamento de um `fw-*`? Não edite o original: copie com outro nome e
-desative o original removendo o arquivo — assim o upgrade nunca reverte sua
-mudança silenciosamente.
-
-## Extensão por stack
-
-O framework não tem variação por tecnologia — a especificidade vive no
-contexto gerado. Se o seu time precisar de procedimentos específicos de stack
-(ex.: playbook de migração Django), o ponto de extensão é uma skill do time,
-não um fork dos arquivos `fw-*`.
-
-## Futuro: distribuição como plugin
-
-A estrutura já é compatível com o formato de plugins do Claude Code (que
-empacotam skills, agents e hooks em uma unidade instalável). Quando houver
-múltiplos times consumindo o framework, publique-o como plugin em um
-marketplace interno — o fluxo de instalação/atualização passa a ser nativo e
-este documento vira apenas a política de propriedade.
+Skills/agents próprios do time: crie normalmente em `.claude/` do projeto,
+com qualquer nome sem o namespace `farol:` — plugin e projeto convivem sem
+colisão (é para isso que o namespace existe). Para mudar o comportamento de
+uma skill do plugin, não edite o plugin: copie o SKILL.md para
+`.claude/skills/<nome>/` do projeto com outro nome e use a sua versão.
