@@ -1,5 +1,6 @@
 {
   "name": "farol",
+  "description": "Farol — project context, memory and specialized agents for Claude Code on any stack. Points, remembers and validates; never touches your code.",
   "owner": {
     "name": "Zaqueu Lopes da Silva Araujo"
   },

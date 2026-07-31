@@ -14,6 +14,26 @@ sessões (memória persistente).
 > Projeto independente, não afiliado nem endossado pela Anthropic.
 > Claude Code é um produto da Anthropic.
 
+## English — quick start
+
+Farol ("lighthouse") gives Claude Code durable, token-efficient knowledge of
+your project: it detects your stack, maps architecture, commands and
+**inviolable product/legal constraints**, and remembers across sessions —
+while never touching your source code. Team docs always take precedence;
+three modes (adopt / augment / bootstrap) match how documented your project
+already is. Battle-tested through four adversarial field reports (see
+CHANGELOG).
+
+```
+/plugin marketplace add ZaqueuLopesDaSilvaAraujo/farol
+/plugin install farol@farol
+```
+
+Then, in each project: `/farol:init` → `/farol:contextualize`. Day-to-day:
+`/farol:status`, `/farol:update`, `/farol:decision`, `/farol:consolidate`.
+Full documentation is in Brazilian Portuguese; the skills work in any
+language your project uses.
+
 
 O Farol é uma camada fina e reutilizável que transforma o Claude Code em um
 assistente especializado em **qualquer** projeto, separando:
