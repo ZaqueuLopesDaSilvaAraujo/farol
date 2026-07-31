@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fw-guard.sh — Hook PreToolUse (Bash) do Claude Context Framework (v1.1.0)
+# fw-guard.sh — Hook PreToolUse (Bash) do Farol (v2.0.2)
 # Bloqueia deterministicamente comandos destrutivos. exit 2 = bloquear.
 # Analisa APENAS o campo tool_input.command (não o payload inteiro).
 # Exceções do time: .claude/hooks/fw-guard-allow (1 regex por linha) —

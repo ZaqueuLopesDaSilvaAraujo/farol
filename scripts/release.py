@@ -23,6 +23,32 @@ REQUIRED = [
     ".gitattributes",
 ]
 
+def validate_versions():
+    """Achado nº 1 do quinto relato: versão espalhada com bump manual é bug
+    de processo. Falha a release se qualquer fonte divergir do VERSION —
+    em especial plugin.json/marketplace.json, os arquivos que o Claude Code
+    LE para decidir updates (equivalente ao `claude plugin tag`)."""
+    import json as _json, re as _re
+    v = open(os.path.join(ROOT, "VERSION")).read().strip()
+    errs = []
+    pj = _json.load(open(os.path.join(ROOT, ".claude-plugin/plugin.json")))
+    if pj.get("version") != v:
+        errs.append(f"plugin.json version={pj.get('version')} != VERSION={v}")
+    mp = _json.load(open(os.path.join(ROOT, ".claude-plugin/marketplace.json")))
+    for p in mp.get("plugins", []):
+        if p.get("version") != v:
+            errs.append(f"marketplace.json '{p.get('name')}' version={p.get('version')} != {v}")
+    if f"ccf:managed-start v{v}" not in open(os.path.join(ROOT, "CLAUDE.md.ccf")).read():
+        errs.append(f"CLAUDE.md.ccf: marcador ccf:managed-start != v{v}")
+    if f"# Farol — v{v}" not in open(os.path.join(ROOT, "README.md")).read():
+        errs.append(f"README.md: titulo != v{v}")
+    if f"# Instalação — Farol v{v}" not in open(os.path.join(ROOT, "INSTALL.md")).read():
+        errs.append(f"INSTALL.md: titulo != v{v}")
+    init = open(os.path.join(ROOT, "skills/init/SKILL.md")).read()
+    if _re.search(r'"version":\s*"\d', init):
+        errs.append("skills/init: versao literal no template do manifesto (deve referenciar plugin.json)")
+    return errs
+
 def collect():
     files = []
     for root, dirs, names in os.walk(ROOT):
@@ -47,6 +73,13 @@ def validate_names(files):
 def main():
     version = open(os.path.join(ROOT, "VERSION")).read().strip()
     out = sys.argv[1] if len(sys.argv) > 1 else f"farol-v{version}.zip"
+
+    errs = validate_versions()
+    if errs:
+        print("FALHA na consistencia de versoes:")
+        for e in errs:
+            print("  -", e)
+        sys.exit(1)
 
     files = collect()
     errs = validate_names(files)

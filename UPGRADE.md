@@ -42,6 +42,14 @@ Atualizar o Farol é operação nativa do Claude Code: `/plugin` → marketplace
 6. Revise o `git status` e commite o resultado — a migração mexe em vários
    arquivos do `.claude/` e no CLAUDE.md.
 
+## Clones anteriores à v2.0.1 (Windows/CRLF)
+
+O `.gitattributes` (LF em scripts) só vale para arquivos re-extraídos; um
+clone antigo mantém CRLF em arquivos que não mudaram desde então. Para
+normalizar de uma vez: `git add --renormalize . ` no clone — ou simplesmente
+atualize para a v2.0.2+, cujos hooks foram tocados de propósito para forçar
+a re-extração com LF.
+
 ## Migração 1.2.x → 1.3.x (manifesto)
 
 No `.claude/context/manifest.json`: substitua `"adopt_mode": true|false` por

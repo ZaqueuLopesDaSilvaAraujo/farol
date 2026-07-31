@@ -1,5 +1,24 @@
 # Changelog
 
+## 2.0.2 — Quinto relato de campo (parcial: canal de update)
+- **Canal de atualização consertado** (achado nº 1): a v2.0.1 bumpou tudo
+  MENOS `.claude-plugin/plugin.json` e `marketplace.json` — os arquivos que
+  o Claude Code lê para decidir updates. `claude plugin update` respondia
+  "already at latest (2.0.0)" e ninguém recebia as correções. Manifestos
+  agora em 2.0.2.
+- **Mecanização da classe do bug**: `release.py` valida consistência de
+  versão em todas as fontes (manifestos, marcador do bloco, títulos,
+  template do init) e FALHA a release em divergência — o equivalente ao
+  `claude plugin tag`, que não rodávamos.
+- **Fonte única de versão** (achado nº 3): o template de manifesto do
+  `/farol:init` não carrega mais número literal; a versão vem sempre de
+  `plugin.json`.
+- **CRLF residual** (achado nº 4): hooks tocados de propósito para forçar
+  re-extração com LF em clones antigos; nota de `git add --renormalize` no
+  UPGRADE e `sed -i 's/\r$//'` no passo de cópia dos hooks no Windows.
+- Confirmado pelo relato: modo atualização do init e detecção de ponteiro
+  morto funcionaram exatamente como especificados ao vivo.
+
 ## 2.0.1 — Quarto relato de campo
 - **Migração não falha mais em silêncio** (o bug mais sério do relato):
   `/farol:init` ganhou modo atualização — compara a versão do marcador

@@ -27,7 +27,9 @@ projeto em estado inconsistente se interrompido). Nunca toque em código-fonte.
   de `${CLAUDE_PLUGIN_ROOT}/templates/` — templates são a ÚNICA exceção à
   regra de não-sobrescrita, porque são cópias de origem do framework
   (backup antes; compare ignorando fim de linha CRLF para não acusar
-  customização falsa); (c) atualize `version` no manifesto. NUNCA toque no
+  customização falsa); (c) atualize `version` no manifesto para a versão lida de
+  `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` — fonte ÚNICA de
+  versão; nunca um número escrito nesta skill. NUNCA toque no
   restante de `.claude/context/`. Depois, siga direto ao relatório final.
 
 ## 2. Estrutura e índice-stub (antes de qualquer referência a eles)
@@ -108,7 +110,7 @@ Crie `.claude/context/manifest.json`:
 ```json
 {
   "framework": "farol",
-  "version": "2.0.1",
+  "version": "<copie de ${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json — fonte única>",
   "installed_at": "<ISO-8601>",
   "contextualized_at": null,
   "anchor_mode": "git | date",

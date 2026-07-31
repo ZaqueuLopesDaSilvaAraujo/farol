@@ -33,8 +33,11 @@ explícitas /farol:update e /farol:consolidate).
    de `${CLAUDE_PLUGIN_ROOT}/hooks/` para `.claude/hooks/` do PROJETO —
    hooks de segurança devem ser opt-in por projeto, nunca globais; por isso
    o plugin NÃO os auto-ativa via hooks.json.
-1. `chmod +x .claude/hooks/fw-guard.sh .claude/hooks/fw-freshness.sh`
-2. Mescle em `.claude/settings.json`:
+1. No Windows, normalize o fim de linha após copiar (clones antigos podem
+   ter extraído CRLF antes do `.gitattributes` da v2.0.1, e o shebang com
+   `\r` quebra sob Git Bash): `sed -i 's/\r$//' .claude/hooks/*.sh`
+2. `chmod +x .claude/hooks/fw-guard.sh .claude/hooks/fw-freshness.sh`
+3. Mescle em `.claude/settings.json`:
 
 ```json
 {
@@ -50,7 +53,7 @@ explícitas /farol:update e /farol:consolidate).
 }
 ```
 
-3. Ajuste `BLOCK_PATTERNS` do guard à realidade do time (deploys, CLIs de
+4. Ajuste `BLOCK_PATTERNS` do guard à realidade do time (deploys, CLIs de
    infra, migrações) — ou, preferível, mantenha o script intacto e use
    `fw-guard-allow` para exceções.
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fw-freshness.sh — Hook SessionStart opcional (v1.1.0)
+# fw-freshness.sh — Hook SessionStart opcional do Farol (v2.0.2)
 # Injeta 1 linha de aviso quando o contexto está velho. Custo ~0 tokens.
 MANIFEST=".claude/context/manifest.json"
 [ -f "$MANIFEST" ] || exit 0
