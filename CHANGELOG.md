@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.0.3 — Quinto relato de campo (fechamento)
+- **Achado nº 5 corrigido em duas camadas**: `fw-guard-allow` no
+  `.gitattributes` (LF no clone) E o guard removendo `\r` de cada linha
+  lida — exceções do time editadas no Windows (Notepad incluso) não morrem
+  mais em silêncio. Correção de classe: o script parou de confiar em fim
+  de linha. Testado com arquivo de exceções em CRLF.
+- **Validado ao vivo pelo relato**: canal de update (2.0.0 → 2.0.2),
+  checagem 9 acusando divergência real, init em modo atualização com
+  escopo exato, CRLF nos `.sh`, `/farol:update` incremental completo.
+- **Economia do adopt, segunda metade medida**: corrigir as lacunas
+  devolveu 625 tokens de always-on (2.409 → 1.784). Registrado no README.
+
 ## 2.0.2 — Quinto relato de campo (parcial: canal de update)
 - **Canal de atualização consertado** (achado nº 1): a v2.0.1 bumpou tudo
   MENOS `.claude-plugin/plugin.json` e `marketplace.json` — os arquivos que

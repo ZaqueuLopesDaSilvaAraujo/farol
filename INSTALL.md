@@ -1,4 +1,4 @@
-# Instalação — Farol v2.0.2
+# Instalação — Farol v2.0.3
 
 Guia de uma página. A partir da v2.0, o Farol é um **plugin do Claude Code**:
 instala uma vez, vale para todos os seus projetos, atualiza sozinho.
@@ -47,10 +47,10 @@ projeto.
 Quer experimentar antes de instalar? Carregue o Farol só para uma sessão:
 
 ```bash
-claude --plugin-url https://github.com/ZaqueuLopesDaSilvaAraujo/farol/releases/latest/download/farol-v2.0.2.zip
+claude --plugin-url https://github.com/ZaqueuLopesDaSilvaAraujo/farol/releases/latest/download/farol-v2.0.3.zip
 ```
 
-(ou baixe o zip e use `claude --plugin-dir ./farol-v2.0.2.zip`). Nada fica
+(ou baixe o zip e use `claude --plugin-dir ./farol-v2.0.3.zip`). Nada fica
 instalado ao fechar a sessão.
 
 ## Caminho alternativo: instalação local (zip)
@@ -58,7 +58,7 @@ instalado ao fechar a sessão.
 Para ambientes sem acesso ao marketplace, baixe o zip da Release e:
 
 ```bash
-unzip farol-v2.0.2.zip -d ~/farol
+unzip farol-v2.0.3.zip -d ~/farol
 ```
 
 E na sessão do Claude Code: `/plugin install ~/farol`

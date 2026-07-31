@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# fw-guard.sh — Hook PreToolUse (Bash) do Farol (v2.0.2)
+# fw-guard.sh — Hook PreToolUse (Bash) do Farol (v2.0.3)
 # Bloqueia deterministicamente comandos destrutivos. exit 2 = bloquear.
 # Analisa APENAS o campo tool_input.command (não o payload inteiro).
 # Exceções do time: .claude/hooks/fw-guard-allow (1 regex por linha) —
@@ -28,6 +28,7 @@ CMD="$(extract_command | tr '\n' ' ')"
 ALLOW_FILE="$(dirname "$0")/fw-guard-allow"
 if [ -f "$ALLOW_FILE" ]; then
   while IFS= read -r allow; do
+    allow="${allow%$'\r'}"  # imune a CRLF: o arquivo é editado pelo time, inclusive no Notepad
     case "$allow" in ''|\#*) continue ;; esac
     printf '%s' "$CMD" | grep -qiE "$allow" && exit 0
   done < "$ALLOW_FILE"

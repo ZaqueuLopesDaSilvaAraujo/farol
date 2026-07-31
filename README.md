@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v2.0.2
+# Farol — v2.0.3
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*
@@ -61,7 +61,10 @@ desse caso, seja honesto consigo:
   campo): adopt entrega fidelidade e precedência, NÃO redução de tokens; a
   seção de princípios invioláveis é conteúdo novo que custa — e vale — seu
   espaço. O `contextBudget` existe para vigiar esse custo, não para
-  prometer queda.
+  prometer queda. E a segunda metade, também medida: trabalhar a lista de
+  lacunas DEVOLVE tokens — fato promovido a doc do time desocupa o
+  always-on (no quinto relato de campo: −625 tokens após corrigir 4
+  lacunas). A lista de lacunas é lista de trabalho, não decoração.
 - Documentação parcial (um README com comandos, sem regras de produto)? O
   modo **augment** aproveita o que existe e cria apenas as lacunas.
 - Dúvida pontual num arquivo? Grep responde de graça; nenhum framework de
