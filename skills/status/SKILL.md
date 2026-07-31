@@ -54,6 +54,10 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
     ou `bytesPerToken`? → ALERTA "manifesto no esquema 1.x" com ponteiro
     para a migração do UPGRADE.md. Templates do projeto mencionando
     comandos `/fw-*` → mesmo alerta (rode /farol:init para refrescá-los).
+14. Políticas: `policies.md` existe? Se sim, há duplicação proibida
+    (números de orçamento repetidos fora do manifesto; lista de
+    autoridade repetida fora do index.md) ou campo que conflita com o
+    manifesto? → alerta com o trecho.
 
 ## Saída
 

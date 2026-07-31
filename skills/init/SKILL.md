@@ -9,6 +9,14 @@ disable-model-invocation: true
 
 # /farol:init — Instalador do framework
 
+## 0. Políticas do projeto (se existirem)
+
+Se `.claude/context/policies.md` existir, leia-o ANTES de tudo e aplique o
+que estiver declarado sem reperguntar; pergunte apenas o que estiver
+ausente. Sem o arquivo, comportamento padrão. Políticas governam o
+comportamento do Farol (não regras gerais da sessão) e são lidas apenas
+aqui — nunca entram no always-on.
+
 Execute na ordem (alvos antes de referências: nenhum passo pode deixar o
 projeto em estado inconsistente se interrompido). Nunca toque em código-fonte.
 
@@ -42,6 +50,10 @@ projeto em estado inconsistente se interrompido). Nunca toque em código-fonte.
 - Crie `.claude/context/index.md` a partir de `_templates/index.md` com as
   seções em `_(pendente: /farol:contextualize)_`. Existir vazio > não existir:
   o import do CLAUDE.md jamais aponta para arquivo inexistente.
+- Crie `.claude/context/policies.md` a partir de `_templates/policies.md`,
+  se ausente — com tudo em padrão, nada muda; preenchê-lo é opt-in do
+  time. Em modo atualização, apenas informe se o template ganhou campos
+  novos que a cópia do projeto não tem.
 
 ## 3. Detecção rápida de stack (orçamento: só manifestos)
 

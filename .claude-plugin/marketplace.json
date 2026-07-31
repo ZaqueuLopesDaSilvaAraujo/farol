@@ -9,7 +9,7 @@
       "name": "farol",
       "source": "./",
       "description": "Contexto, memória e agentes especializados para o Claude Code em qualquer stack — aponta, lembra e valida; nunca toca no seu código.",
-      "version": "2.0.3"
+      "version": "2.1.0"
     }
   ]
 }

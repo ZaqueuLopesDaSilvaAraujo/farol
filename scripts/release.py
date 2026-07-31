@@ -18,7 +18,7 @@ REQUIRED = [
     "skills/init/SKILL.md", "skills/contextualize/SKILL.md",
     "skills/update/SKILL.md", "skills/consolidate/SKILL.md",
     "skills/decision/SKILL.md", "skills/status/SKILL.md",
-    "templates/index.md", "hooks/fw-guard.sh",
+    "templates/index.md", "templates/policies.md", "hooks/fw-guard.sh",
     "assets/banner.png", "scripts/release.py", "tests/PROTOCOL.md",
     ".gitattributes",
 ]

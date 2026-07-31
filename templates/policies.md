@@ -1,0 +1,41 @@
+# Políticas do projeto (Farol)
+
+<!-- PROPRIEDADE DO TIME — decisão humana, nunca derivada do código.
+     Lido APENAS pelas skills do Farol (init/contextualize/update/status);
+     nunca entra no always-on: custo zero nas sessões comuns.
+     ESCOPO: este arquivo governa o comportamento DO FAROL. Regras gerais
+     de sessão (ex.: "push só sob ordem") pertencem ao CLAUDE.md e à doc
+     do time — não as duplique aqui.
+     Campo ausente ou comentado = comportamento padrão. As skills aplicam
+     o que estiver declarado SEM reperguntar, e perguntam só o ausente. -->
+
+## a. Fluxo de versionamento do contexto
+<!-- ex.: "contexto commitado na mesma branch e no mesmo conjunto de
+     commits da mudança que o motivou; push sob ordem explícita" -->
+- _(não declarado — comportamento padrão)_
+
+## b. O que da pasta .claude/ entra no Git
+<!-- padrão: versionar .claude/context/ e CLAUDE.md; ignorar
+     .claude/backups/. Declare aqui as exceções do time. -->
+- _(não declarado — padrão)_
+
+## c. Gatilho de atualização do índice
+<!-- A LISTA de docs que prevalecem já vive em "Fontes de autoridade" do
+     index.md — não a duplique. Declare apenas o GATILHO:
+     ex.: "o índice atualiza no mesmo PR que altera estrutura" -->
+- _(não declarado — padrão: sugerido após mudança estrutural)_
+
+## d. Orçamento de contexto — política (números NÃO)
+<!-- Os números vivem SÓ no contextBudget do manifest.json — não os
+     repita aqui. Declare a política em torno deles: -->
+- Recalibrações de bytesPerToken nunca são silenciosas: exigem linha na
+  memory.md com data, valor anterior, novo valor e método de medição.
+
+## e. Arquivos ainda não mapeados
+<!-- "sob demanda" (padrão) | "varredura periódica via /farol:update" -->
+- _(não declarado — padrão: sob demanda)_
+
+## Defasagem no arranque (fw-freshness)
+<!-- comportamento das skills: "avisar" (padrão) | "sugerir_update"
+     limiar em commits — o hook fw-freshness.sh lê a linha abaixo: -->
+freshness_limiar: 20

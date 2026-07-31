@@ -1,5 +1,32 @@
 # Changelog
 
+## 2.1.0 — Políticas por projeto e fluxo colaborativo
+- **`policies.md`** (novo, opt-in): decisões que o time já tomou — fluxo
+  de versionamento do contexto, o que entra no git, gatilho de atualização
+  do índice, política de recalibração, limiar de frescor — declaradas uma
+  vez e aplicadas por init/contextualize/update/status SEM reperguntar;
+  as skills perguntam só o ausente. Lido apenas nas execuções do Farol:
+  **custo zero no always-on**. Criado pelo init a partir de
+  `templates/policies.md` com tudo em padrão (sem preencher, nada muda).
+- **Fluxo colaborativo**: contexto atualizado entra NO MESMO conjunto de
+  commits da mudança estrutural (regra no bloco gerenciado e no update);
+  clone novo valida âncora e aplica só o delta — contextualização
+  completa em clone é sempre desnecessária; conflito de merge com regra
+  ESTRATIFICADA: seções derivadas regeneram via update sobre o código
+  mesclado, seções humanas (ADRs, invioláveis, políticas, memória) se
+  resolvem como documento — não são deriváveis de código.
+- **fw-freshness configurável**: limiar de commits lido de
+  `freshness_limiar:` no policies.md (ou env FAROL_FRESHNESS_LIMIAR),
+  padrão 20.
+- **Checagem 14 do status**: valida o policies.md contra duplicações
+  proibidas (números de orçamento fora do manifesto; lista de autoridade
+  fora do index.md).
+- **Rejeitados conscientemente** (triagem da proposta): atualização
+  automática do contexto no arranque (mutação silenciosa de base de
+  conhecimento — recusada desde a v1.0); "código é a fonte" aplicado a
+  seções humanas; políticas como segundo lugar de regras gerais de sessão
+  (recriaria o conflito de autoridade do primeiro relato).
+
 ## 2.0.3 — Quinto relato de campo (fechamento)
 - **Achado nº 5 corrigido em duas camadas**: `fw-guard-allow` no
   `.gitattributes` (LF no clone) E o guard removendo `\r` de cada linha

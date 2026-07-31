@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v2.0.3
+# Farol — v2.1.0
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*
@@ -106,6 +106,28 @@ versionado junto com ele.
 Implementação e arquitetura acontecem na **sessão principal** (que conhece a
 conversa inteira). Subagents existem apenas onde o isolamento de contexto é
 vantagem: tarefas que leem muito e devolvem pouco.
+
+## Uso em time — fluxo colaborativo
+
+O contexto versionado é um mapa único do projeto; o Farol o mantém assim:
+
+- **Clone novo**: contexto já vem no repositório — rode `/farol:status`
+  (valida a âncora) e, se houver defasagem, `/farol:update` aplica só o
+  delta. Contextualização completa em clone novo é sempre desnecessária.
+- **Trabalho do dia**: mudou estrutura (arquivo novo, módulo movido,
+  contrato alterado)? `/farol:update` — e o contexto atualizado entra NO
+  MESMO conjunto de commits da mudança. O mapa viaja com o território.
+- **Conflito de merge no contexto**: seções derivadas do código (mapa,
+  arquitetura, comandos) se resolvem REGENERANDO via `/farol:update` sobre
+  o código mesclado — nunca editando o derivado na mão. Seções humanas
+  (ADRs, princípios invioláveis, políticas, memória) se resolvem como
+  qualquer documento do time.
+- **Políticas do time** (`\.claude/context/policies.md`): decisões que o
+  time já tomou — fluxo de versionamento do contexto, o que entra no git,
+  gatilho de atualização, política de recalibração, limiar de frescor —
+  declaradas uma vez e aplicadas pelas skills sem reperguntar a cada
+  adopt/update. Lidas só nas execuções do Farol: custo zero no always-on.
+  Template comentado em `templates/policies.md`.
 
 ## Segurança
 

@@ -10,6 +10,14 @@ disable-model-invocation: true
 
 # /farol:contextualize — Contextualização do projeto
 
+## 0. Políticas do projeto (se existirem)
+
+Se `.claude/context/policies.md` existir, leia-o ANTES de tudo e aplique o
+que estiver declarado sem reperguntar; pergunte apenas o que estiver
+ausente. Sem o arquivo, comportamento padrão. Políticas governam o
+comportamento do Farol (não regras gerais da sessão) e são lidas apenas
+aqui — nunca entram no always-on.
+
 Objetivo: preencher `.claude/context/` com conhecimento **permanente e
 verificado**, sob orçamento estrito de leitura. Nunca altere código-fonte.
 

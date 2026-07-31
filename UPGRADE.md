@@ -16,6 +16,13 @@ Atualizar o Farol é operação nativa do Claude Code: `/plugin` → marketplace
 | Bloco `ccf:managed-*` | Framework | Atualizado só pelo /farol:init, com backup |
 | Hooks copiados para `.claude/hooks/` + `fw-guard-allow` | Time (opt-in) | Nunca tocados; recopie do plugin se quiser a versão nova |
 
+## Migração 2.0.x → 2.1.0 (opcional)
+
+A v2.1.0 adiciona políticas por projeto e o fluxo colaborativo. Nada muda
+sem ação sua. Para adotar: rode `/farol:init` (modo atualização) — ele cria
+`.claude/context/policies.md` do template com tudo em padrão; preencha os
+campos que o time já decidiu e commite junto do contexto.
+
 ## Migração 1.x → 2.0
 
 1. Instale o plugin (2 comandos — ver INSTALL.md; agentes e automações usam
