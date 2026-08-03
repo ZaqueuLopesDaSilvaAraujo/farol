@@ -83,13 +83,22 @@ def config(root):
     return tel
 
 
-def raw_path(root, session):
-    return os.path.join(root, ".claude", "context", "telemetry",
+def log_path(root, cfg):
+    destino = cfg.get("path") or ".claude/context/telemetry/log.jsonl"
+    return destino if os.path.isabs(destino) else os.path.join(root, destino)
+
+
+def raw_path(root, session, cfg):
+    """O arquivo transitorio da tarefa mora ONDE o log mora — inclusive quando
+    telemetry.path e absoluto e aponta para fora do repositorio. Fixa-lo em
+    .claude/context/ deixaria residuo dentro do projeto se a sessao fosse
+    interrompida entre o primeiro prompt e o Stop."""
+    return os.path.join(os.path.dirname(log_path(root, cfg)),
                         ".task-%s.jsonl" % (session or "anon"))
 
 
-def append_raw(root, session, record):
-    path = raw_path(root, session)
+def append_raw(root, session, record, cfg):
+    path = raw_path(root, session, cfg)
     os.makedirs(os.path.dirname(path), exist_ok=True)
     record["t"] = time.time()
     with open(path, "a", encoding="utf-8") as fh:
@@ -120,7 +129,7 @@ def classify_path(root, path, record_paths):
 
 
 def mode_prompt(root, data, cfg):
-    append_raw(root, data.get("session_id"), {"e": "start"})
+    append_raw(root, data.get("session_id"), {"e": "start"}, cfg)
     print(INSTRUCAO)
 
 
@@ -135,7 +144,7 @@ def mode_tool(root, data, cfg):
     # permite atribuir custo por agente sem o agente escrever nada.
     append_raw(root, data.get("session_id"),
                {"e": "tool", "n": tool, "k": kind, "i": ident,
-                "a": data.get("agent_type")})
+                "a": data.get("agent_type")}, cfg)
 
 
 def mode_subagent(root, data, cfg):
@@ -144,7 +153,7 @@ def mode_subagent(root, data, cfg):
     append_raw(root, data.get("session_id"),
                {"e": "subagent", "n": data.get("agent_type"),
                 "id": data.get("agent_id"),
-                "fim": data.get("subagent_exit_reason")})
+                "fim": data.get("subagent_exit_reason")}, cfg)
 
 
 def task_class(data):
@@ -201,7 +210,7 @@ def mode_consolidate(root, data, cfg):
     if data.get("agent_type"):
         return
     session = data.get("session_id")
-    raw = raw_path(root, session)
+    raw = raw_path(root, session, cfg)
     if not os.path.isfile(raw):
         return  # nada observado nesta tarefa
     eventos = []
@@ -277,8 +286,7 @@ def mode_consolidate(root, data, cfg):
         "tests_passed": None,
     }
 
-    destino = cfg.get("path") or ".claude/context/telemetry/log.jsonl"
-    destino = destino if os.path.isabs(destino) else os.path.join(root, destino)
+    destino = log_path(root, cfg)
     os.makedirs(os.path.dirname(destino), exist_ok=True)
     existentes = []
     if os.path.isfile(destino):
@@ -296,7 +304,7 @@ def mode_consolidate(root, data, cfg):
 def mode_probe(root, data, cfg):
     """Grava so as CHAVES do payload — nunca os valores. Use para descobrir o
     contrato do SubagentStop da sua versao do Claude Code."""
-    destino = os.path.join(root, ".claude", "context", "telemetry", "probe.txt")
+    destino = os.path.join(os.path.dirname(log_path(root, cfg)), "probe.txt")
     os.makedirs(os.path.dirname(destino), exist_ok=True)
     with open(destino, "a", encoding="utf-8") as fh:
         fh.write("%s: %s\n" % (data.get("hook_event_name", "?"),
