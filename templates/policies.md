@@ -29,7 +29,7 @@ ex.: "o índice atualiza no mesmo PR que altera estrutura" -->
 <!-- Os números vivem SÓ no contextBudget do manifest.json — não os
 repita aqui. Declare a política em torno deles: -->
 - Recalibrações de bytesPerToken nunca são silenciosas: exigem linha na
-  memory.md com data, valor anterior, novo valor e método de medição.
+memory.md com data, valor anterior, novo valor e método de medição.
 
 ## e. Arquivos ainda não mapeados
 <!-- "sob demanda" (padrão) | "varredura periódica via /farol:update" -->
@@ -42,8 +42,24 @@ padrões em prosa para legibilidade — divergência entre manifest e agente
 é bug a corrigir no manifest, não customização. Declare aqui apenas a
 política em torno dos limites: -->
 - Exceder `hardMaxAgents`, ativar paralelismo fora do padrão ou desativar
-  `stopWhenEvidenceIsSufficient` exige justificativa registrada na
-  resposta da tarefa — nunca silenciosa.
+`stopWhenEvidenceIsSufficient` exige justificativa registrada na
+resposta da tarefa — nunca silenciosa.
+
+## g. Política de modelos por categoria (aliases NÃO vivem fixos aqui)
+<!-- Diferente do executionBudget: o Claude Code lê `model:` do frontmatter
+de cada agente ANTES de iniciá-lo, então não há indireção possível via
+manifest ou via este arquivo. Este bloco só registra a INTENÇÃO de
+mapeamento categoria→alias, para auditoria (`modelPolicy` no
+manifest.json); mudar o comportamento real exige editar `model:`
+diretamente em `agents/fw-*.md`. Categorias sugeridas: `economical`
+(busca/leitura descartável — papel do fw-scout), `balanced` (padrão do
+framework — implementação, depuração comum, revisão comum),
+`deep-reasoning` (arquitetura complexa, decisão de alto impacto — só
+com justificativa). Os aliases reais (`sonnet`/`opus`/`haiku`/ID
+completo) dependem da versão do Claude Code e do plano/allowlist da
+organização — não presuma disponibilidade. -->
+- _(não declarado — padrão: `inherit` em todos os agentes; nenhuma
+categoria fixada por este framework)_
 
 ## Defasagem no arranque (fw-freshness)
 <!-- comportamento das skills: "avisar" (padrão) | "sugerir_update"
