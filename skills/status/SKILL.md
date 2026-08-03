@@ -62,6 +62,12 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
     Task Router do CLAUDE.md (T3 → `hardMaxAgents`) e contra os padrões
     citados em `fw-scout`/`fw-debugger` (12/8/3). Divergência → alerta
     com o trecho e sugestão de corrigir o manifest (nunca o agente).
+16. Política de modelos: `modelPolicy.declared` é `true` no manifesto mas
+    nenhum agente em `agents/fw-*.md` tem `model:` diferente de
+    ausente/`inherit`? → alerte a divergência (intenção declarada, sem
+    efeito real). Reporte também, de forma neutra (não é erro), quais
+    agentes têm `model:` fixado hoje e para qual alias — afeta custo e
+    deve aparecer sempre que houver.
 
 ## Saída
 
