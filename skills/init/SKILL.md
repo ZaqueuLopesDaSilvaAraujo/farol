@@ -24,7 +24,7 @@ Execute na ordem (alvos antes de referências: nenhum passo pode deixar o projet
 ## 2. Estrutura e índice-stub (antes de qualquer referência a eles)
 
 - Copie os templates do plugin (`${CLAUDE_PLUGIN_ROOT}/templates/`) para `.claude/context/_templates/` do projeto — cópia local permite ao time customizá-los; o `/farol:contextualize` sempre usa a cópia do projeto.
-- Crie (se ausentes): `.claude/context/{modules,decisions}/` e `.claude/context/memory.md` a partir de `_templates/memory.md`.
+- Crie (se ausentes): `.claude/context/{modules,decisions,workspace}/` e `.claude/context/memory.md` a partir de `_templates/memory.md`. `workspace/` nasce vazio — é uso sob demanda pelo `fw-scout`/`fw-debugger` (ver `_templates/workspace.md`); não gere investigações de exemplo.
 - Crie `.claude/context/index.md` a partir de `_templates/index.md` com as seções em `_(pendente: /farol:contextualize)_`. Existir vazio > não existir: o import do CLAUDE.md jamais aponta para arquivo inexistente.
 - Crie `.claude/context/policies.md` a partir de `_templates/policies.md`, se ausente — com tudo em padrão, nada muda; preenchê-lo é opt-in do time. Em modo atualização, apenas informe se o template ganhou campos novos que a cópia do projeto não tem.
 
