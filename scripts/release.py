@@ -23,31 +23,40 @@ REQUIRED = [
     ".gitattributes",
 ]
 
+
+def slurp(rel):
+    """Leitura SEMPRE em utf-8. O default do open() e o encoding do locale —
+    no Windows, cp1252 — e o conteudo do Farol e acentuado: sem isto o portao
+    de release morre com UnicodeDecodeError na plataforma do proprio autor."""
+    with open(os.path.join(ROOT, rel), encoding="utf-8") as fh:
+        return fh.read()
+
 def validate_versions():
     """Achado nº 1 do quinto relato: versão espalhada com bump manual é bug
     de processo. Falha a release se qualquer fonte divergir do VERSION —
     em especial plugin.json/marketplace.json, os arquivos que o Claude Code
     LE para decidir updates (equivalente ao `claude plugin tag`)."""
     import json as _json, re as _re
-    v = open(os.path.join(ROOT, "VERSION")).read().strip()
+    v = slurp("VERSION").strip()
     errs = []
-    pj = _json.load(open(os.path.join(ROOT, ".claude-plugin/plugin.json")))
+    pj = _json.loads(slurp(".claude-plugin/plugin.json"))
     if pj.get("version") != v:
         errs.append(f"plugin.json version={pj.get('version')} != VERSION={v}")
-    mp = _json.load(open(os.path.join(ROOT, ".claude-plugin/marketplace.json")))
+    mp = _json.loads(slurp(".claude-plugin/marketplace.json"))
     for p in mp.get("plugins", []):
         if p.get("version") != v:
             errs.append(f"marketplace.json '{p.get('name')}' version={p.get('version')} != {v}")
-    if f"ccf:managed-start v{v}" not in open(os.path.join(ROOT, "CLAUDE.md.ccf")).read():
+    if f"ccf:managed-start v{v}" not in slurp("CLAUDE.md.ccf"):
         errs.append(f"CLAUDE.md.ccf: marcador ccf:managed-start != v{v}")
-    if f"# Farol — v{v}" not in open(os.path.join(ROOT, "README.md")).read():
+    if f"# Farol — v{v}" not in slurp("README.md"):
         errs.append(f"README.md: titulo != v{v}")
-    if f"# Instalação — Farol v{v}" not in open(os.path.join(ROOT, "INSTALL.md")).read():
+    if f"# Instalação — Farol v{v}" not in slurp("INSTALL.md"):
         errs.append(f"INSTALL.md: titulo != v{v}")
-    init = open(os.path.join(ROOT, "skills/init/SKILL.md")).read()
+    init = slurp("skills/init/SKILL.md")
     if _re.search(r'"version":\s*"\d', init):
         errs.append("skills/init: versao literal no template do manifesto (deve referenciar plugin.json)")
     return errs
+
 
 def collect():
     files = []
@@ -71,7 +80,11 @@ def validate_names(files):
     return errs
 
 def main():
-    version = open(os.path.join(ROOT, "VERSION")).read().strip()
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")  # Windows: console/pipe cp1252
+    except Exception:
+        pass
+    version = slurp("VERSION").strip()
     out = sys.argv[1] if len(sys.argv) > 1 else f"farol-v{version}.zip"
 
     errs = validate_versions()
