@@ -9,7 +9,14 @@ diretorio vazio nunca e empacotado (a licao da release 1.1.0).
 import filecmp, os, subprocess, sys, tempfile, zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-EXCLUDE_DIRS = {".git", "__pycache__", "node_modules"}
+# `.claude` e estado de INSTALACAO do framework num projeto; o pacote leva o
+# framework, nunca uma instalacao dele. Sem isto, rodar /farol:init na raiz do
+# proprio repositorio embarcaria o contexto local dentro do plugin que os
+# usuarios instalam. `.claude-plugin` (nome distinto) segue no pacote.
+EXCLUDE_DIRS = {".git", ".claude", "__pycache__", "node_modules"}
+# Mesma razao, para arquivo: o pacote distribui CLAUDE.md.ccf (o TEMPLATE).
+# Um CLAUDE.md na raiz e o always-on ativo de quem instalou aqui.
+EXCLUDE_FILES = {"CLAUDE.md"}
 REQUIRED = [
     "VERSION", "README.md", "INSTALL.md", "CHANGELOG.md", "UPGRADE.md",
     "LICENSE", "CLAUDE.md.ccf",
@@ -79,8 +86,10 @@ def collect():
     for root, dirs, names in os.walk(ROOT):
         dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
         for n in names:
-            p = os.path.relpath(os.path.join(root, n), ROOT)
-            files.append(p.replace(os.sep, "/"))
+            p = os.path.relpath(os.path.join(root, n), ROOT).replace(os.sep, "/")
+            if p in EXCLUDE_FILES:
+                continue
+            files.append(p)
     return sorted(files)
 
 def validate_names(files):
