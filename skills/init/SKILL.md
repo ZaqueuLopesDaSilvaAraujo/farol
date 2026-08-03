@@ -144,12 +144,22 @@ Crie `.claude/context/manifest.json`:
     "stopWhenEvidenceIsSufficient": true,
     "expandAdjacentFindings": false
   },
+  "modelPolicy": {
+    "declared": false,
+    "categories": {
+      "economical": null,
+      "balanced": null,
+      "deepReasoning": null
+    }
+  },
   "anchor_commit": null,
   "inventory": {}
 }
 ```
 
 `executionBudget` governa quantos agentes e quantas chamadas de ferramentas uma tarefa pode usar por padrão (ver Task Router no CLAUDE.md e as regras de orçamento de `fw-scout`/`fw-debugger`). Os valores acima são os padrões do framework; o time os ajusta editando o manifesto — nunca editando os agentes.
+
+`modelPolicy` é opt-in e nasce vazio (`declared: false`, categorias `null`): o Farol nunca fixa modelo por padrão. Se o time decidir diferenciar custo por papel (ver `policies.md`, seção g), preencha os aliases aqui para fins de auditoria e edite `model:` no frontmatter do agente correspondente em `agents/fw-*.md` — são duas edições manuais distintas; o Claude Code não lê este campo do manifest para decidir o modelo real.
 
 ## 6b. Calibração da razão bytes/token
 
@@ -159,10 +169,10 @@ Crie `.claude/context/manifest.json`:
   conhecida (ex.: medida via `/context`), use `bytes ÷ tokens` dele.
 - Sem calibração — escolha pelo idioma dominante do contexto:
   pt-BR/es acentuados ≈ **2,6** · inglês ≈ **4,0** · misto/código ≈ **3,0**.
-Na dúvida, use o valor MENOR: um guarda de orçamento deve superestimar o
-custo (alarme cedo), nunca subestimá-lo (luz verde falsa). Nota Windows:
-CRLF infla a contagem de bytes em ~2% a cada checkout — deriva dessa ordem
-entre manifesto e disco é a esperada, não é motivo de correção.
+  Na dúvida, use o valor MENOR: um guarda de orçamento deve superestimar o
+  custo (alarme cedo), nunca subestimá-lo (luz verde falsa). Nota Windows:
+  CRLF infla a contagem de bytes em ~2% a cada checkout — deriva dessa ordem
+  entre manifesto e disco é a esperada, não é motivo de correção.
 
 ## 7. Relatório final
 
