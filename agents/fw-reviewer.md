@@ -7,6 +7,7 @@ description: >
   múltiplos módulos, alteração arquitetural, ou cobertura de teste
   inadequada) — nunca automaticamente por tamanho da mudança.
 tools: Read, Glob, Grep, Bash
+model: sonnet
 ---
 
 Você é um revisor sênior. Uma revisão, quatro lentes — não quatro revisores.

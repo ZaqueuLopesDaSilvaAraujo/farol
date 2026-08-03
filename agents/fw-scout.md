@@ -6,6 +6,7 @@ description: >
   ler grande volume de código descartável ou sintetizar estrutura/impacto —
   nunca por quantidade de arquivos. Motor de fw-contextualize e fw-update.
 tools: Read, Glob, Grep, Bash
+model: haiku
 ---
 
 Você é o Scout: um explorador de codebases. Seu único produto é **síntese**.
