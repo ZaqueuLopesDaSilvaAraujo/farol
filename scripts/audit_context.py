@@ -5,7 +5,8 @@ Verifica regras obrigatorias do framework (bloco always-on enxuto,
 task router T0-T3, ausencia da regra de delegacao por quantidade de
 arquivos, execution budget, workspace temporario, criterio de parada
 do Scout, limite de hipoteses do Debugger, gatilho de risco do
-Reviewer, politica de modelos) e reporta OK/AVISO/ERRO por checagem.
+Reviewer, politica de modelos, telemetria opcional) e reporta
+OK/AVISO/ERRO por checagem.
 
 Uso:
     python3 scripts/audit_context.py [raiz]
@@ -22,9 +23,11 @@ import os
 import re
 import sys
 
+
 ERROR = "ERRO"
 WARN = "AVISO"
 OK = "OK"
+
 
 THREE_FILE_RULE = re.compile(
     r"3\+?\s*arquivos|tr[êe]s\s*(ou mais)?\s*arquivos", re.IGNORECASE
@@ -170,15 +173,63 @@ def check_model_policy_project(report, manifest_path):
         report.add(WARN, "model-policy-manifest", "%s sem campo modelPolicy (schema anterior ao Commit 6 - nao bloqueante)" % manifest_path)
 
 
+def check_telemetry(report, root):
+    policies_path = os.path.join(root, "templates", "policies.md")
+    text = read(policies_path)
+    campos = re.compile(r"telemetria", re.IGNORECASE)
+    proibidos = re.compile(r"proibidos", re.IGNORECASE)
+    if text and campos.search(text) and proibidos.search(text):
+        report.add(OK, "telemetry-policy", "secao de telemetria com campos permitidos/proibidos em %s" % policies_path)
+    else:
+        report.add(WARN, "telemetry-policy", "nenhuma secao de telemetria (campos permitidos/proibidos) encontrada em %s" % policies_path)
+
+    init_path = os.path.join(root, "skills", "init", "SKILL.md")
+    init_text = read(init_path)
+    schema = re.compile(r"\"telemetry\"", re.IGNORECASE)
+    if init_text and schema.search(init_text):
+        report.add(OK, "telemetry-schema", "bloco telemetry presente no manifesto de %s" % init_path)
+    else:
+        report.add(ERROR, "telemetry-schema", "%s nao declara o bloco telemetry no manifesto" % init_path)
+
+    status_path = os.path.join(root, "skills", "status", "SKILL.md")
+    status_text = read(status_path)
+    if status_text and re.search(r"telemetry", status_text, re.IGNORECASE):
+        report.add(OK, "telemetry-status-check", "verificacao de telemetria presente em %s" % status_path)
+    else:
+        report.add(WARN, "telemetry-status-check", "%s nao verifica telemetry.enabled" % status_path)
+
+
+def check_telemetry_project(report, manifest_path):
+    text = read(manifest_path)
+    if text is None:
+        return
+    try:
+        data = json.loads(text)
+    except ValueError:
+        return
+    if "telemetry" in data:
+        telemetry = data["telemetry"] if isinstance(data["telemetry"], dict) else {}
+        enabled = bool(telemetry.get("enabled"))
+        report.add(OK, "telemetry-manifest", "presente em %s (enabled=%s)" % (manifest_path, enabled))
+        if enabled:
+            log_path = telemetry.get("path")
+            if log_path and not os.path.isfile(log_path):
+                report.add(WARN, "telemetry-log", "telemetry.enabled=true mas %s nao existe ainda" % log_path)
+    else:
+        report.add(WARN, "telemetry-manifest", "%s sem campo telemetry (schema anterior ao Commit 8 - nao bloqueante)" % manifest_path)
+
+
 def audit_framework(report, root):
     claude = check_teto(report, os.path.join(root, "CLAUDE.md.ccf"), 80, "always-on-teto")
     check_pattern(report, claude, "CLAUDE.md.ccf", THREE_FILE_RULE, "always-on-regra-3-arquivos", True)
     router = re.compile(r"\bt0\b|\bt1\b|\bt2\b|\bt3\b|menor conjunto suficiente", re.IGNORECASE)
     check_pattern(report, claude, "CLAUDE.md.ccf", router, "always-on-task-router", False)
+
     check_teto(report, os.path.join(root, "templates", "index.md"), 120, "index-template-teto")
     check_agents(report, os.path.join(root, "agents"))
     check_exists(report, os.path.join(root, "templates", "workspace.md"), "workspace-template", False)
     check_model_policy(report, root)
+    check_telemetry(report, root)
 
 
 def audit_project(report, root):
@@ -187,6 +238,7 @@ def audit_project(report, root):
     check_teto(report, os.path.join(ctx, "memory.md"), 150, "memory-teto")
     check_execution_budget(report, os.path.join(ctx, "manifest.json"))
     check_model_policy_project(report, os.path.join(ctx, "manifest.json"))
+    check_telemetry_project(report, os.path.join(ctx, "manifest.json"))
     check_exists(report, os.path.join(ctx, "workspace"), "workspace-dir", True)
 
 
