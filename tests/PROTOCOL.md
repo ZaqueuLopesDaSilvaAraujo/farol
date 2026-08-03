@@ -17,6 +17,7 @@ cenário altera código-fonte do projeto de teste.
 | 8 | Empacotamento | `python3 scripts/release.py` | Zip sem diretórios literais de expansão; extração comparada byte a byte; exit 0 |
 | 9 | Descoberta pós-install | instalar o plugin numa sessão aberta | INSTALL.md instrui `/reload-plugins` ou sessão nova; nenhuma promessa de descoberta imediata |
 | 10 | Custo de contexto | rodar `/farol:status` após contextualizar em cada modo | Bytes + estimativa de tokens reportados vs `contextBudget`; adopt com acréscimo mínimo; alerta acima do warning |
+| 11 | Política de modelo declarada sem override | manifest com `modelPolicy.declared: true` e categorias preenchidas; nenhum agent com `model:` distinto de `inherit` | `/farol:status` reporta a divergência (intenção declarada, sem efeito real); `scripts/audit_context.py` não falha (nível AVISO, não ERRO) |
 
 Critério de release: cenário 8 automatizado passando + amostragem manual de
 pelo menos os cenários 3, 4 e 6 (os três que falharam na v1.1.0).
