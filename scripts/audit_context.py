@@ -233,6 +233,39 @@ def check_telemetry(report, root):
         report.add(WARN, "telemetry-status-check", "%s nao verifica telemetry.enabled" % status_path)
 
 
+def hook_registrado(projeto):
+    """O hook conta como instalado tanto copiado para .claude/hooks/ quanto
+    apenas REGISTRADO no settings apontando para um caminho externo — forma
+    valida e util para medir um repositorio sem colocar arquivo dentro dele.
+    Detectar so pelo arquivo produz falso negativo nesse arranjo."""
+    if os.path.isfile(os.path.join(projeto, ".claude", "hooks", "fw-telemetry.py")):
+        return True
+    for nome in ("settings.json", "settings.local.json"):
+        txt = read(os.path.join(projeto, ".claude", nome))
+        if txt and "fw-telemetry" in txt:
+            return True
+    return False
+
+
+def check_escrita_dupla_projeto(report, projeto):
+    """A guarda do lado do FRAMEWORK protege o CLAUDE.md.ccf distribuido. Ela
+    nao ve o CLAUDE.md do PROJETO — que e onde o problema acontece de fato:
+    instalar o hook num projeto cujo plugin ainda e 2.1.x deixa a instrucao de
+    escrita pelo modelo no always-on ao lado do escritor deterministico.
+    Observado em campo apos um /farol:init com plugin defasado."""
+    claude = read(os.path.join(projeto, "CLAUDE.md"))
+    if claude is None:
+        return
+    if not re.search(r"registre uma linha JSONL", claude, re.IGNORECASE):
+        return
+    if hook_registrado(projeto):
+        report.add(WARN, "telemetry-escrita-dupla-projeto",
+                   "%s/CLAUDE.md instrui o modelo a gravar a linha E o hook esta instalado: risco de registro duplicado; rode /farol:init com o plugin atualizado" % projeto)
+    else:
+        report.add(WARN, "telemetry-escrita-dupla-projeto",
+                   "%s/CLAUDE.md ainda carrega a instrucao de telemetria no always-on (bloco gerenciado anterior a 2.2.0): custo fixo por sessao sem escritor" % projeto)
+
+
 def check_telemetry_project(report, manifest_path):
     text = read(manifest_path)
     if text is None:
@@ -250,10 +283,9 @@ def check_telemetry_project(report, manifest_path):
                        "%s sem telemetry.schemaVersion (linhas nao serao comparaveis entre versoes)" % manifest_path)
         if enabled:
             projeto = os.path.dirname(os.path.dirname(os.path.dirname(manifest_path)))
-            hook = os.path.join(projeto, ".claude", "hooks", "fw-telemetry.py")
-            if not os.path.isfile(hook):
+            if not hook_registrado(projeto):
                 report.add(WARN, "telemetry-hook-instalado",
-                           "telemetry.enabled=true mas %s nao existe: campo ligado sem escritor nao gera registro" % hook)
+                           "telemetry.enabled=true mas o hook fw-telemetry.py nao esta em %s/.claude/hooks/ nem registrado no settings: campo ligado sem escritor nao gera registro" % projeto)
             log_path = telemetry.get("path")
             if log_path and not os.path.isfile(log_path):
                 report.add(WARN, "telemetry-log", "telemetry.enabled=true mas %s nao existe ainda" % log_path)
@@ -281,6 +313,7 @@ def audit_project(report, root):
     check_execution_budget(report, os.path.join(ctx, "manifest.json"))
     check_model_policy_project(report, os.path.join(ctx, "manifest.json"))
     check_telemetry_project(report, os.path.join(ctx, "manifest.json"))
+    check_escrita_dupla_projeto(report, root)
     check_exists(report, os.path.join(ctx, "workspace"), "workspace-dir", True)
 
 
