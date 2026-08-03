@@ -21,6 +21,13 @@ Exceder `hardMaxAgents`, ativar paralelismo fora do padrão ou desativar `stopWh
 ## g. Política de modelos por categoria (aliases NÃO vivem fixos aqui)
 (não declarado — padrão: `inherit` em todos os agentes; nenhuma categoria fixada por este framework)
 
+Categorias de referência (nomes conceituais, não aliases de modelo — o alias real depende da versão/plano do Claude Code instalado):
+- `economical`: localização, inventário, busca, classificação, leitura simples, síntese objetiva.
+- `balanced`: implementação, depuração normal, testes, revisão comum, refatoração — categoria padrão quando `modelPolicy.declared` é `false`.
+- `deepReasoning` (`deep-reasoning`): arquitetura complexa, investigação ambígua, decisões de alto impacto, segurança crítica — só com justificativa explícita na resposta da tarefa.
+
+Antes de declarar `modelPolicy.declared: true` e preencher `categories`, confirme via `/farol:status` (verificação 16) o que a versão do Claude Code instalado realmente permite configurar em `model:` de agentes — não presuma suporte técnico inexistente.
+
 ## h. Telemetria local (opcional) — schema NÃO vive fixo aqui
 (não declarado — padrão: `enabled: false` no manifesto; nenhuma métrica registrada)
 
