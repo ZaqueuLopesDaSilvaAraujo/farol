@@ -131,14 +131,43 @@ def check_exists(report, path, nome, isdir):
         report.add(ERROR, nome, "%s nao encontrado" % path)
 
 
-def check_model_policy(report, paths):
+def check_model_policy(report, root):
     categorias = re.compile(r"economical|balanced|deep-reasoning", re.IGNORECASE)
-    for path in paths:
-        text = read(path)
-        if text and categorias.search(text):
-            report.add(OK, "model-policy", "categorias de modelo referenciadas em %s" % path)
-            return
-    report.add(WARN, "model-policy", "nenhuma categoria de modelo encontrada (economical/balanced/deep-reasoning)")
+    policies_path = os.path.join(root, "templates", "policies.md")
+    text = read(policies_path)
+    if text and categorias.search(text):
+        report.add(OK, "model-policy-categorias", "categorias de modelo documentadas em %s" % policies_path)
+    else:
+        report.add(WARN, "model-policy-categorias", "nenhuma categoria de modelo (economical/balanced/deep-reasoning) encontrada em %s" % policies_path)
+
+    init_path = os.path.join(root, "skills", "init", "SKILL.md")
+    init_text = read(init_path)
+    schema = re.compile(r"modelPolicy", re.IGNORECASE)
+    if init_text and schema.search(init_text):
+        report.add(OK, "model-policy-schema", "bloco modelPolicy presente no manifesto de %s" % init_path)
+    else:
+        report.add(ERROR, "model-policy-schema", "%s nao declara o bloco modelPolicy no manifesto" % init_path)
+
+    status_path = os.path.join(root, "skills", "status", "SKILL.md")
+    status_text = read(status_path)
+    if status_text and schema.search(status_text):
+        report.add(OK, "model-policy-status-check", "verificacao de politica de modelo presente em %s" % status_path)
+    else:
+        report.add(WARN, "model-policy-status-check", "%s nao verifica modelPolicy/model: (transparencia de custo)" % status_path)
+
+
+def check_model_policy_project(report, manifest_path):
+    text = read(manifest_path)
+    if text is None:
+        return
+    try:
+        data = json.loads(text)
+    except ValueError:
+        return
+    if "modelPolicy" in data:
+        report.add(OK, "model-policy-manifest", "presente em %s" % manifest_path)
+    else:
+        report.add(WARN, "model-policy-manifest", "%s sem campo modelPolicy (schema anterior ao Commit 6 - nao bloqueante)" % manifest_path)
 
 
 def audit_framework(report, root):
@@ -149,10 +178,7 @@ def audit_framework(report, root):
     check_teto(report, os.path.join(root, "templates", "index.md"), 120, "index-template-teto")
     check_agents(report, os.path.join(root, "agents"))
     check_exists(report, os.path.join(root, "templates", "workspace.md"), "workspace-template", False)
-    check_model_policy(report, [
-        os.path.join(root, "templates", "policies.md"),
-        os.path.join(root, ".claude-plugin", "plugin.json"),
-    ])
+    check_model_policy(report, root)
 
 
 def audit_project(report, root):
@@ -160,6 +186,7 @@ def audit_project(report, root):
     check_teto(report, os.path.join(ctx, "index.md"), 120, "index-teto")
     check_teto(report, os.path.join(ctx, "memory.md"), 150, "memory-teto")
     check_execution_budget(report, os.path.join(ctx, "manifest.json"))
+    check_model_policy_project(report, os.path.join(ctx, "manifest.json"))
     check_exists(report, os.path.join(ctx, "workspace"), "workspace-dir", True)
 
 
