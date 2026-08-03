@@ -6,7 +6,7 @@ Multiplataforma (Windows/Linux/macOS): usa apenas stdlib, sem shell.
 Falha (exit != 0) em qualquer inconsistencia. So arquivos entram no zip —
 diretorio vazio nunca e empacotado (a licao da release 1.1.0).
 """
-import filecmp, os, sys, tempfile, zipfile
+import filecmp, os, subprocess, sys, tempfile, zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXCLUDE_DIRS = {".git", "__pycache__", "node_modules"}
@@ -18,8 +18,10 @@ REQUIRED = [
     "skills/init/SKILL.md", "skills/contextualize/SKILL.md",
     "skills/update/SKILL.md", "skills/consolidate/SKILL.md",
     "skills/decision/SKILL.md", "skills/status/SKILL.md",
-    "templates/index.md", "templates/policies.md", "hooks/fw-guard.sh",
-    "assets/banner.png", "scripts/release.py", "tests/PROTOCOL.md",
+    "templates/index.md", "templates/policies.md", "templates/workspace.md",
+    "hooks/fw-guard.sh", "hooks/fw-freshness.sh", "hooks/fw-telemetry.py",
+    "assets/banner.png", "scripts/release.py", "scripts/audit_context.py",
+    "scripts/report_telemetry.py", "tests/PROTOCOL.md",
     ".gitattributes",
 ]
 
@@ -55,8 +57,22 @@ def validate_versions():
     init = slurp("skills/init/SKILL.md")
     if _re.search(r'"version":\s*"\d', init):
         errs.append("skills/init: versao literal no template do manifesto (deve referenciar plugin.json)")
+    if f"## {v} " not in slurp("CHANGELOG.md"):
+        errs.append(f"CHANGELOG.md: sem secao para a versao {v} (release sem changelog)")
     return errs
 
+
+def run_audit():
+    """A consistencia de versao nao diz nada sobre a coerencia do conteudo.
+    O portao de release passa a exigir a auditoria — os dois validadores
+    viviam desconectados ate a v2.2.0."""
+    proc = subprocess.run(
+        [sys.executable, os.path.join(ROOT, "scripts", "audit_context.py"), ROOT],
+        capture_output=True, text=True, encoding="utf-8")
+    if proc.returncode != 0:
+        print("FALHA na auditoria de contexto (scripts/audit_context.py):")
+        print(proc.stdout)
+        sys.exit(1)
 
 def collect():
     files = []
@@ -87,6 +103,7 @@ def main():
     version = slurp("VERSION").strip()
     out = sys.argv[1] if len(sys.argv) > 1 else f"farol-v{version}.zip"
 
+    run_audit()
     errs = validate_versions()
     if errs:
         print("FALHA na consistencia de versoes:")
