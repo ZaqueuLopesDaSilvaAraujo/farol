@@ -43,6 +43,45 @@ lembrar de escrever a linha, então nada era verificável.
   contagem de acionamentos.
 - **`task_id` usa `prompt_id`** quando a versão do Claude Code o expõe.
 
+### Corrigido a partir de validação em sessão real
+Uma tarefa T3 de ~15 min num projeto .NET expôs quatro defeitos que **nenhum
+fixture pegou** — todos dependem de ordenação de eventos ou de valores que só
+uma execução real produz:
+
+- **`agent_type` pode chegar como string vazia** com `agent_id` preenchido. A
+  guarda do consolidador testava só a veracidade de `agent_type`: vazio é
+  falsy, então um `Stop` de subagente nesse formato passaria e truncaria a
+  tarefa no meio — exatamente o que a guarda existia para impedir. Agora
+  testa `agent_id` primeiro.
+- **Um `SubagentStop` chegou 2,3 s depois** de o `Stop` principal ter
+  consolidado. Como qualquer modo criava o arquivo transitório, sobrava uma
+  raw órfã que nunca viraria linha e contaminaria a tarefa seguinte. Agora só
+  `--prompt` abre tarefa; evento sem tarefa aberta é descartado.
+- **Arquivo transitório e sonda seguem `telemetry.path`**, em vez de ficarem
+  fixos em `.claude/context/telemetry/`. Com caminho absoluto, **nenhum byte
+  de telemetria toca o projeto medido** — nem durante a tarefa.
+- **`tarefas` e `invocações` separados** no relatório por agente: a sessão
+  principal aparecia como `execuções=0` porque o contador só enxergava
+  subagentes, e a principal nunca é invocada.
+
+Confirmado em campo: `agent_type` chega no `SubagentStop` com o nome completo
+(`farol:fw-reviewer`, escopo de plugin incluído). Duas divergências com a
+documentação: `subagent_exit_reason` **não é enviado** (por isso o campo sai
+sempre nulo) e existe um `agent_transcript_path` não documentado.
+
+### Política de campos volta a ter verificação executável
+A reescrita da checagem 17 do `/farol:status` removeu, sem substituto, a
+validação de campos fora da lista permitida — a regra de privacidade da seção
+h ficou só como texto. `report_telemetry.py` passa a implementar
+`CAMPOS_PERMITIDOS` e a denunciar campo proibido e valor de texto longo
+(indício de prompt ou código vazando por campo de nome inocente). A auditoria
+ganha `telemetry-lista-executavel` como ERRO, para que a checagem não possa
+sumir de novo em silêncio.
+
+`models` deixou de ser emitido: era sempre `{}`. Continua permitido pela
+política, mas métrica por modelo segue não implementada — mapear agente para
+modelo exigiria resolver o frontmatter do agente em tempo de hook.
+
 ### Contradição corrigida
 `policies.md` h afirmava que "tarefas T2/T3 registram via o agente `fw-*`
 acionado" — enquanto `fw-scout.md` termina com "Nunca modifique arquivo

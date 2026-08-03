@@ -129,6 +129,26 @@ O contexto versionado é um mapa único do projeto; o Farol o mantém assim:
   adopt/update. Lidas só nas execuções do Farol: custo zero no always-on.
   Template comentado em `templates/policies.md`.
 
+## Telemetria local (opcional, desligada por padrão)
+
+O Farol nunca grava métricas por padrão. Habilitada, o hook
+`fw-telemetry.py` registra **uma linha JSONL por tarefa** — classificação
+T0–T3, chamadas discriminadas por ferramenta, agentes acionados com o custo
+atribuído a quem o gastou, documentos de contexto carregados e duração.
+
+Princípio: **código conta o que é contável; o modelo só declara o que só ele
+sabe** (a classificação). Sem essa declaração a linha sai degradada, nunca
+ausente — medição que o modelo faz de si mesmo não é medição.
+
+Nada de prompts, código-fonte, segredos ou conteúdo de arquivo: arquivos
+fora de `.claude/context/` entram como hash. A lista de campos permitidos
+vive em `policies.md` seção h e é **verificada por código** no relatório.
+
+`scripts/report_telemetry.py` agrega por classificação, agente, ferramenta,
+sessão e versão do framework; `--compare vA vB` mede o antes/depois de uma
+otimização e se recusa a declarar economia sem dados dos dois lados.
+Desligada, custo zero no always-on. Veja `hooks/README.md`.
+
 ## Segurança
 
 O framework nunca altera código-fonte, instala dependências, faz commit/push

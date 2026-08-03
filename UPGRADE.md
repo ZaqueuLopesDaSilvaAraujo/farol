@@ -16,6 +16,43 @@ Atualizar o Farol é operação nativa do Claude Code: `/plugin` → marketplace
 | Bloco `ccf:managed-*` | Framework | Atualizado só pelo /farol:init, com backup |
 | Hooks copiados para `.claude/hooks/` + `fw-guard-allow` | Time (opt-in) | Nunca tocados; recopie do plugin se quiser a versão nova |
 
+## Migração 2.1.0 → 2.2.0 (opcional)
+
+A v2.2.0 adiciona **telemetria local determinística**, desligada por padrão.
+**Nada muda sem ação sua** — atualizar o plugin não passa a registrar nada.
+
+O que o upgrade faz sozinho: ao rodar `/farol:init` (modo atualização), o
+bloco gerenciado do `CLAUDE.md.ccf` perde 4 linhas de instrução de telemetria
+que a v2.1.0 mantinha always-on — **devolve ~106 tokens em toda sessão**,
+mesmo para quem nunca usar o recurso.
+
+Para adotar a telemetria (3 passos, todos opt-in):
+
+1. Acrescente o bloco ao `.claude/context/manifest.json`:
+   ```json
+   "telemetry": {
+     "enabled": true,
+     "path": ".claude/context/telemetry/log.jsonl",
+     "schemaVersion": 1, "recordFilePaths": false,
+     "retainDays": 90, "maxLines": 5000
+   }
+   ```
+   `path` aceita caminho absoluto — útil para medir um repositório sem sujar
+   o diff dele (o arquivo transitório da tarefa segue o mesmo diretório).
+2. Copie `hooks/fw-telemetry.py` para `.claude/hooks/` e registre os 4
+   eventos no `settings.json` (ver `hooks/README.md`). Sem o hook, o campo
+   ligado **não gera registro** — não existe caminho alternativo pelo modelo.
+3. Adicione o diretório da telemetria ao `.gitignore`: é registro
+   operacional local, não conhecimento de projeto.
+
+Leitura: `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/report_telemetry.py .` — ou
+`--panel` para as 3 linhas que o `/farol:status` exibe. O relatório valida
+cada linha contra a lista de campos permitidos da seção h do `policies.md` e
+denuncia violação de política.
+
+Manifesto sem o bloco `telemetry` continua válido: a auditoria trata a
+ausência como AVISO, nunca ERRO.
+
 ## Migração 2.0.x → 2.1.0 (opcional)
 
 A v2.1.0 adiciona políticas por projeto e o fluxo colaborativo. Nada muda

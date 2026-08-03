@@ -93,6 +93,16 @@ registrar no `settings.json`. É opt-in por projeto, de propósito — um plugin
 que bloqueia `git push` globalmente de surpresa seria exatamente o tipo de
 comportamento que o Farol condena.
 
+## (Opcional) Telemetria local
+
+Desligada por padrão — o Farol não grava métrica nenhuma sem duas ações suas:
+`telemetry.enabled: true` no manifesto **e** o hook `fw-telemetry.py`
+registrado. Copiado com a telemetria desligada, o hook é inerte; o campo
+ligado sem o hook não gera registro. Passo a passo em `hooks/README.md`,
+migração em `UPGRADE.md`.
+
+Leitura: `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/report_telemetry.py .`
+
 ## Dia a dia
 
 | Quando | Comando |
