@@ -19,14 +19,14 @@ Recalibrações de `bytesPerToken` nunca são silenciosas: exigem linha na `memo
 Exceder `hardMaxAgents`, ativar paralelismo fora do padrão ou desativar `stopWhenEvidenceIsSufficient` exige justificativa registrada na resposta da tarefa — nunca silenciosa.
 
 ## g. Política de modelos por categoria (aliases NÃO vivem fixos aqui)
-(não declarado — padrão: `inherit` em todos os agentes; nenhuma categoria fixada por este framework)
+Padrão do próprio framework (confirmado: Claude Code suporta `model:` no frontmatter de agentes, inclusive os de plugin): `fw-scout` roda em `economical` (`model: haiku`); `fw-debugger` e `fw-reviewer` rodam em `balanced` (`model: sonnet`). Para sobrescrever, copie o agente para `.claude/agents/` do projeto e edite o `model:` lá — nunca edite os agentes do plugin diretamente.
 
 Categorias de referência (nomes conceituais, não aliases de modelo — o alias real depende da versão/plano do Claude Code instalado):
 - `economical`: localização, inventário, busca, classificação, leitura simples, síntese objetiva.
-- `balanced`: implementação, depuração normal, testes, revisão comum, refatoração — categoria padrão quando `modelPolicy.declared` é `false`.
-- `deepReasoning` (`deep-reasoning`): arquitetura complexa, investigação ambígua, decisões de alto impacto, segurança crítica — só com justificativa explícita na resposta da tarefa.
+- `balanced`: implementação, depuração normal, testes, revisão comum, refatoração — categoria padrão do framework para depuração e revisão.
+- `deepReasoning` (`deep-reasoning`): arquitetura complexa, investigação ambígua, decisões de alto impacto, segurança crítica — só com justificativa explícita na resposta da tarefa; nenhum agente do framework fixa esta categoria por padrão.
 
-Antes de declarar `modelPolicy.declared: true` e preencher `categories`, confirme via `/farol:status` (verificação 16) o que a versão do Claude Code instalado realmente permite configurar em `model:` de agentes — não presuma suporte técnico inexistente.
+`modelPolicy.declared`/`categories` no manifesto nascem vazios (`false`/`null`) e servem para o TIME registrar, para fins de auditoria, customizações do projeto além do padrão do framework — preencher o manifesto não altera o modelo real sozinho; a edição de `model:` no frontmatter do agente correspondente é sempre manual e distinta. Antes de declarar `modelPolicy.declared: true`, confirme via `/farol:status` (verificação 16) que o agente correspondente realmente tem `model:` fixado.
 
 ## h. Telemetria local (opcional) — schema NÃO vive fixo aqui
 (não declarado — padrão: `enabled: false` no manifesto; nenhuma métrica registrada)
