@@ -19,7 +19,7 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
    - `anchor_mode` = "date" → reporte idade em dias e a limitação (sem git,
      sem incremental por diff); 30+ dias → recomendar /farol:update guiado.
    - `anchor_mode` = "git" → `git rev-list --count <anchor_commit>..HEAD`:
-     0 → em dia · 1–19 → ok · 20+ → recomendar /farol:update. Âncora
+     0 → em dia · 1-19 → ok · 20+ → recomendar /farol:update. Âncora
      inexistente (rebase) → avisar; /farol:update resolve via fallback por data.
 4. `memory.md`: linhas > 150 → recomendar /farol:consolidate.
 5. Integridade: arquivos do `inventory` existem? Hash bate?
@@ -36,7 +36,7 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
 9. Bloco gerenciado: marcadores `ccf:managed-start`/`ccf:managed-end`
    presentes, únicos E com a MESMA versão do plugin
    (`${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`)? Divergência =
-   ERRO: o bloco always-on está ensinando comandos de outra era — rode
+   ERRO: o bloco always-on está comendo comandos de outra era — rode
    /farol:init para atualizá-lo.
 10. Recursos instalados: o plugin `farol` está ativo (as skills `/farol:*`
     respondem) e os 3 agents `fw-*` aparecem entre os agents disponíveis?
@@ -58,6 +58,10 @@ Somente leitura. Sem missões de scout, sem leitura de código-fonte.
     (números de orçamento repetidos fora do manifesto; lista de
     autoridade repetida fora do index.md) ou campo que conflita com o
     manifesto? → alerta com o trecho.
+15. `executionBudget` no manifest existe e é coerente? Confira contra o
+    Task Router do CLAUDE.md (T3 → `hardMaxAgents`) e contra os padrões
+    citados em `fw-scout`/`fw-debugger` (12/8/3). Divergência → alerta
+    com o trecho e sugestão de corrigir o manifest (nunca o agente).
 
 ## Saída
 
