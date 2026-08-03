@@ -196,6 +196,17 @@ def check_telemetry(report, root):
     else:
         report.add(ERROR, "telemetry-reader", "%s nao encontrado (dado gravado e nunca lido)" % reader)
 
+    # A lista de campos permitidos da secao h precisa de implementacao
+    # EXECUTAVEL. Ja se perdeu uma vez ao reescrever a checagem 17 do status:
+    # a regra continuou no texto e ficou sem ninguem verificando.
+    leitor_txt = read(reader)
+    if leitor_txt and re.search(r"CAMPOS_PERMITIDOS", leitor_txt):
+        report.add(OK, "telemetry-lista-executavel",
+                   "lista de campos permitidos implementada em %s" % reader)
+    else:
+        report.add(ERROR, "telemetry-lista-executavel",
+                   "%s nao implementa CAMPOS_PERMITIDOS: a regra da secao h ficaria so declarativa" % reader)
+
     # Guarda contra escrita dupla: com o hook como escritor unico, o always-on
     # NAO pode voltar a instruir o modelo a gravar a linha.
     claude = read(os.path.join(root, "CLAUDE.md.ccf"))

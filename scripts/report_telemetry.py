@@ -26,6 +26,30 @@ import time
 DEFAULT_PATH = os.path.join(".claude", "context", "telemetry", "log.jsonl")
 CLASSES = ("T0", "T1", "T2", "T3")
 
+# Implementacao EXECUTAVEL da lista da secao h do policies.md. A regra de
+# privacidade nao pode existir so como texto: campo gravado fora desta lista e
+# falha de politica, e quem escreve a linha nao pode ser quem a valida.
+CAMPOS_PERMITIDOS = {
+    "v", "ts", "ts_epoch", "session_id", "framework_version", "task_id",
+    "task_class", "agents", "agents_total", "models", "tools",
+    "tools_by_agent", "tool_calls_total", "files_read", "files_reread",
+    "context_docs", "workspace_reused", "context_updated", "duration_ms",
+    "result", "tests_passed",
+}
+# Valor de texto acima disto denuncia prompt, codigo ou trecho de arquivo
+# vazando por um campo de nome inocente.
+TETO_TEXTO = 120
+
+
+def violacoes(reg):
+    """Campos fora da politica e valores longos demais, para UMA linha."""
+    achados = ["campo nao permitido: %s" % c
+               for c in sorted(set(reg) - CAMPOS_PERMITIDOS)]
+    achados += ["valor longo em '%s' (%d chars)" % (k, len(v))
+                for k, v in sorted(reg.items())
+                if isinstance(v, str) and len(v) > TETO_TEXTO]
+    return achados
+
 
 def ATOR():
     return {"tarefas": 0, "invocacoes": 0, "tool_calls": 0}
@@ -80,7 +104,11 @@ def agregar(linhas):
         "por_versao": {},
         "com_classe": sum(1 for r in linhas if r.get("task_class")),
         "context_docs": {},
+        "violacoes": [],
     }
+    for i, reg in enumerate(linhas, 1):
+        for v in violacoes(reg):
+            ag["violacoes"].append("linha %d: %s" % (i, v))
     for reg in linhas:
         classe = reg.get("task_class") or "?"
         alvo = ag["por_classe"].setdefault(
@@ -142,6 +170,9 @@ def render_panel(ag, invalidas):
             cobertura(ag),
             " · %d linha(s) invalida(s)" % invalidas if invalidas else ""),
     ]
+    if ag["violacoes"]:
+        linhas.insert(0, "  POLITICA: %d violacao(oes) de campo — rode sem --panel"
+                      % len(ag["violacoes"]))
     return linhas
 
 
@@ -157,6 +188,15 @@ def render_full(ag, invalidas, destino):
         cobertura(ag), ag["com_classe"], ag["tarefas"]))
     if invalidas:
         out.append("Linhas invalidas ignoradas: %d" % invalidas)
+
+    out += ["", "Conformidade com a politica (policies.md, secao h)"]
+    if ag["violacoes"]:
+        for v in ag["violacoes"][:15]:
+            out.append("  VIOLACAO %s" % v)
+        if len(ag["violacoes"]) > 15:
+            out.append("  ... e mais %d" % (len(ag["violacoes"]) - 15))
+    else:
+        out.append("  OK: nenhum campo fora da lista permitida, nenhum valor longo")
 
     out += ["", "Por classificacao (Task Router)"]
     for classe in CLASSES + ("?",):

@@ -281,7 +281,9 @@ def mode_consolidate(root, data, cfg):
         "task_class": task_class(data),
         "agents": [a for a in agentes if a],
         "agents_total": len(agentes),
-        "models": {},
+        # 'models' permanece PERMITIDO pela politica mas nao e emitido: mapear
+        # agente -> modelo exigiria resolver o frontmatter do agente em tempo
+        # de hook. Campo sempre vazio e promessa nao cumprida dentro da linha.
         "tools": tools,
         "tools_by_agent": tools_por_agente,
         "tool_calls_total": sum(tools.values()),
