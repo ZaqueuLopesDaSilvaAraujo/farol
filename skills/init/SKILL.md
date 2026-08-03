@@ -133,10 +133,23 @@ Crie `.claude/context/manifest.json`:
     "warningThresholdTokens": 1800,
     "hardLimitTokens": 2500
   },
+  "executionBudget": {
+    "defaultMaxAgents": 1,
+    "hardMaxAgents": 2,
+    "parallelAgentsByDefault": false,
+    "scoutRecommendedToolCalls": 12,
+    "scoutReevaluateAfterToolCalls": 8,
+    "debuggerMaxHypotheses": 3,
+    "requireWorkspaceReuse": true,
+    "stopWhenEvidenceIsSufficient": true,
+    "expandAdjacentFindings": false
+  },
   "anchor_commit": null,
   "inventory": {}
 }
 ```
+
+`executionBudget` governa quantos agentes e quantas chamadas de ferramentas uma tarefa pode usar por padrão (ver Task Router no CLAUDE.md e as regras de orçamento de `fw-scout`/`fw-debugger`). Os valores acima são os padrões do framework; o time os ajusta editando o manifesto — nunca editando os agentes.
 
 ## 6b. Calibração da razão bytes/token
 
@@ -145,16 +158,16 @@ Crie `.claude/context/manifest.json`:
 - Melhor opção — calibrar: se existir um documento com contagem de tokens
   conhecida (ex.: medida via `/context`), use `bytes ÷ tokens` dele.
 - Sem calibração — escolha pelo idioma dominante do contexto:
-  pt-BR/es/acentuados ≈ **2,6** · inglês ≈ **4,0** · misto/código ≈ **3,0**.
+  pt-BR/es acentuados ≈ **2,6** · inglês ≈ **4,0** · misto/código ≈ **3,0**.
 Na dúvida, use o valor MENOR: um guarda de orçamento deve superestimar o
 custo (alarme cedo), nunca subestimá-lo (luz verde falsa). Nota Windows:
 CRLF infla a contagem de bytes em ~2% a cada checkout — deriva dessa ordem
-entre manifesto e disco é esperada, não é motivo de correção.
+entre manifesto e disco é a esperada, não é motivo de correção.
 
 ## 7. Relatório final
 
 Até 15 linhas: criado, preservado/backupeado, stack detectada, `anchor_mode`,
-modo selecionado ou recomendado (com o porquê), e o próximo passo: **`/farol:contextualize`**. Ofereça (sem ativar sem
+modo selecionado ou recomendado (com o porquê), e o próximo passo: **/farol:contextualize**. Ofereça (sem ativar sem
 confirmação) os hooks opcionais de `.claude/hooks/README.md`. Sugira ao
 usuário adicionar `.claude/backups/` ao `.gitignore` e commitar `.claude/` +
 `CLAUDE.md` (ver INSTALL.md, passo 4) — sem executar comandos git por ele.
