@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="Farol — context framework para Claude Code" width="100%">
 </p>
 
-# Farol — v2.1.0
+# Farol — v2.2.0
 
 **Contexto, memória e agentes especializados para o Claude Code — em qualquer stack.**
 *Farol ("lighthouse"): project context, memory and specialized agents for Claude Code, on any stack. Docs in Brazilian Portuguese.*

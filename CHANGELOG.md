@@ -1,5 +1,91 @@
 # Changelog
 
+## 2.2.0 — Telemetria determinística (e o que a 2.1.0 empacotou sem documentar)
+
+### Telemetria: de contrato declarado a medição verificável
+Até aqui o Farol tinha **schema, política e auditoria de telemetria — e zero
+código que coletasse qualquer métrica**. O registro dependia de o modelo
+lembrar de escrever a linha, então nada era verificável.
+
+- **`hooks/fw-telemetry.py`** (novo, opcional): escritor determinístico em
+  `UserPromptSubmit` (abre a tarefa), `PostToolUse` (conta ferramenta por
+  ferramenta), `SubagentStop` (agentes acionados) e `Stop` (consolida 1 linha
+  JSONL). Princípio: **código conta o que é contável; o modelo só declara o
+  que só ele sabe** — a classificação T0–T3. Sem essa declaração a linha sai
+  degradada (`task_class: null`), nunca ausente.
+- **`scripts/report_telemetry.py`** (novo): o dado deixa de ser gravado e
+  nunca lido. Agrega por classificação, agente, modelo, **ferramenta**,
+  sessão e **versão do framework**; `--compare vA vB` produz o delta do A/B
+  do `PROTOCOL.md`. Toda soma acontece no script — o `/farol:status` só
+  executa e exibe (`--panel`, 3 linhas, respeitando o teto de 15).
+- **Gate duplo**: o hook só age se estiver instalado E `telemetry.enabled`
+  for `true`. Copiado com a telemetria desligada, é inerte.
+- **Custo zero no always-on**: as 4 linhas de instrução saíram do
+  `CLAUDE.md.ccf` (~105 tokens em *toda* sessão, para um recurso que nasce
+  desligado) e viraram injeção condicional via `UserPromptSubmit`.
+- **Cobertura T0 resolvida**: como a tarefa abre no `UserPromptSubmit`, uma
+  T0 sem nenhuma chamada de ferramenta também registra. A lacuna que o
+  cenário 13 dava como esperada deixou de existir.
+- **Privacidade por construção**: arquivos fora de `.claude/context/` entram
+  como hash (conta releitura sem registrar caminho); a classe T0–T3 sai do
+  `last_assistant_message` do evento `Stop` — que contém só o texto final do
+  assistente, **nunca o prompt do usuário** — e **apenas o token casado pela
+  regex é persistido**. O transcript virou fallback (a documentação
+  desaconselha lê-lo: "may lag"). `recordFilePaths` é opt-in.
+- **`Stop` dentro de subagente é ignorado**: o evento dispara tanto na
+  conversa principal quanto dentro de cada subagente. Consolidar no segundo
+  caso fecharia e apagaria o registro no meio da tarefa, produzindo várias
+  linhas truncadas em vez de uma. Só o `Stop` sem `agent_type` encerra.
+- **`tools_by_agent`**: eventos de ferramenta dentro de um subagente carregam
+  `agent_type`, então cada chamada é creditada a quem a fez. Sem isso o total
+  da tarefa seria atribuído a todos os agentes acionados, inflando qualquer
+  comparação. O item "métricas por agente" passa a ser medição real, não
+  contagem de acionamentos.
+- **`task_id` usa `prompt_id`** quando a versão do Claude Code o expõe.
+
+### Contradição corrigida
+`policies.md` h afirmava que "tarefas T2/T3 registram via o agente `fw-*`
+acionado" — enquanto `fw-scout.md` termina com "Nunca modifique arquivo
+algum". O agente eleito como registrador estava proibido de registrar.
+Com `SubagentStop`, o hook observa a execução de fora: o agente volta a ter
+uma responsabilidade só (sintetizar). A frase não foi remendada, foi
+substituída.
+
+### Correções de release
+- **`release.py` não rodava no Windows**: 8 chamadas a `open()` sem
+  `encoding="utf-8"` faziam o portão de release morrer com
+  `UnicodeDecodeError` no "Á" de `INVIOLÁVEIS`, apesar do docstring prometer
+  "Multiplataforma". Leitura centralizada em `slurp()`, sempre utf-8.
+- **`release.py` agora executa `audit_context.py`** e falha a release se a
+  auditoria falhar — os dois validadores viviam desconectados.
+- **`REQUIRED` completado**: `audit_context.py`, `workspace.md`,
+  `fw-freshness.sh` e os dois arquivos novos não eram obrigatórios no pacote.
+- **Release sem changelog agora falha**: `validate_versions()` exige seção
+  da versão corrente no `CHANGELOG.md` — a classe de bug desta própria
+  entrada, mecanizada.
+- Auditoria ganhou `telemetry-writer`, `telemetry-reader`,
+  `telemetry-schema-version`, `telemetry-hook-instalado` e a guarda
+  `telemetry-escrita-dupla` (ERRO se o always-on voltar a instruir escrita).
+
+### Documentação retroativa (commits que a 2.1.0 empacotou em silêncio)
+As mudanças abaixo foram feitas após a marcação da 2.1.0 e nunca tiveram
+entrada de changelog. Ficam registradas aqui:
+- **Task Router T0–T3** no bloco gerenciado: classificação antes da ação,
+  T0/T1 sem delegar, T2 com UM agente, T3 com no máximo 2. Substituiu a
+  regra de delegação por quantidade de arquivos.
+- **`executionBudget`** no manifesto: `defaultMaxAgents`, `hardMaxAgents`,
+  `scoutRecommendedToolCalls` (12), `scoutReevaluateAfterToolCalls` (8),
+  `debuggerMaxHypotheses` (3) — os agentes referenciam o manifesto, o time
+  ajusta lá e nunca no agente.
+- **Model Routing**: `fw-scout` em `model: haiku`, `fw-debugger`/`fw-reviewer`
+  em `model: sonnet`; `modelPolicy` no manifesto é declaratório e não altera
+  o modelo real sozinho — `/farol:status` #16 acusa a divergência.
+- **`templates/workspace.md`**: workspace temporário de investigação, com
+  ciclo de encerramento explícito; `/farol:init` cria `workspace/` vazio.
+- **`fw-reviewer` só por risco concreto**, nunca por tamanho da mudança.
+- **`scripts/audit_context.py`**: auditoria determinística das regras
+  obrigatórias do framework.
+
 ## 2.1.0 — Políticas por projeto e fluxo colaborativo
 - **`policies.md`** (novo, opt-in): decisões que o time já tomou — fluxo
   de versionamento do contexto, o que entra no git, gatilho de atualização

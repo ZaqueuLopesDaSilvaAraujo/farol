@@ -1,4 +1,4 @@
-# Instalação — Farol v2.1.0
+# Instalação — Farol v2.2.0
 
 Guia de uma página. A partir da v2.0, o Farol é um **plugin do Claude Code**:
 instala uma vez, vale para todos os seus projetos, atualiza sozinho.
