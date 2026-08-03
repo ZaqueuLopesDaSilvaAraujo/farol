@@ -1,6 +1,9 @@
 ---
 name: init
-description: Instala o Claude Context Framework: cria estrutura de contexto, detecta stack, preserva arquivos existentes com backup. Invocado pelo usuário com /farol:init. Nunca modifica código-fonte.
+description: >
+  Instala o Claude Context Framework: cria estrutura de contexto, detecta
+  stack, preserva arquivos existentes com backup. Invocado pelo usuário com
+  /farol:init. Nunca modifica código-fonte.
 disable-model-invocation: true
 ---
 
