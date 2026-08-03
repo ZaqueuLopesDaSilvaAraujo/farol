@@ -95,7 +95,11 @@ Crie `.claude/context/manifest.json`:
   },
   "telemetry": {
     "enabled": false,
-    "path": ".claude/context/telemetry/log.jsonl"
+    "path": ".claude/context/telemetry/log.jsonl",
+    "schemaVersion": 1,
+    "recordFilePaths": false,
+    "retainDays": 90,
+    "maxLines": 5000
   },
   "anchor_commit": null,
   "inventory": {}
@@ -106,7 +110,7 @@ Crie `.claude/context/manifest.json`:
 
 `modelPolicy` documenta a política de modelo. Os agentes empacotados do Farol já vêm com um padrão do próprio framework — `fw-scout` em `economical` (`model: haiku`), `fw-debugger`/`fw-reviewer` em `balanced` (`model: sonnet`), ver `policies.md` seção g. `declared`/`categories` no manifesto nascem vazios (`false`/`null`) e servem só para o time registrar, para fins de auditoria, customizações do projeto além desse padrão; preencher o manifesto não altera o modelo real sozinho — a edição de `model:` no frontmatter do agente correspondente é sempre manual e distinta, e o Claude Code não lê este campo do manifest para decidir o modelo real.
 
-`telemetry` é opt-in e nasce desligada (`enabled: false`): o Farol nunca grava métricas por padrão. Se o time habilitar (ver `policies.md`, seção h), registre ao final de cada tarefa T1 ou superior uma linha JSONL em `path` com só os campos permitidos ali listados — nunca prompts completos, código-fonte, segredos, tokens, credenciais, dados pessoais ou conteúdo integral de arquivo. Tarefas T0 (resposta direta, sem carregar nenhum agente) não têm cobertura garantida por esta regra sozinha — ver risco documentado no `tests/PROTOCOL.md`. Sugira adicionar `telemetry/` ao `.gitignore`: é registro operacional local, não conhecimento de projeto para versionar.
+`telemetry` é opt-in e nasce desligada (`enabled: false`): o Farol nunca grava métricas por padrão. Quem grava é o hook `fw-telemetry.py` (opcional, ver `.claude/hooks/README.md`) — **nunca o modelo e nunca um agente**; sem o hook instalado, ligar o campo não produz registro algum. O gate é duplo de propósito: o hook copiado com `enabled: false` é inerte, e o campo em `true` sem hook não inventa dados. Nada disso ocupa espaço no always-on: com a telemetria desligada, o hook não injeta instrução nenhuma. Sugira adicionar `telemetry/` ao `.gitignore`: é registro operacional local, não conhecimento de projeto para versionar.
 
 ### 6b. Calibração da razão bytes/token
 

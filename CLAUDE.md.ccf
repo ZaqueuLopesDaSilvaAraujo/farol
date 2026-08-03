@@ -36,10 +36,6 @@ bloco com um CLAUDE.md existente sem apagar conteúdo do time. -->
 - Ao aprender um fato permanente sobre o projeto (comando, convenção, pegadinha),
   registre-o em `.claude/context/memory.md` (1 linha, seção correta). Nunca
   registre informação temporária.
-- Se o manifesto declarar `telemetry.enabled: true`, ao concluir a tarefa
-  registre uma linha JSONL em `telemetry.path` só com os campos permitidos
-  (ver `policies.md`, seção h); telemetria é opt-in e desligada por padrão —
-  sem essa declaração, ignore esta regra.
 - Se `/farol:status` ou o manifesto indicarem contexto desatualizado (muitos commits
   desde a âncora), sugira `/farol:update` antes de tarefas grandes.
 

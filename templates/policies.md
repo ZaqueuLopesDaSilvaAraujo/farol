@@ -31,13 +31,21 @@ Categorias de referência (nomes conceituais, não aliases de modelo — o alias
 ## h. Telemetria local (opcional) — schema NÃO vive fixo aqui
 (não declarado — padrão: `enabled: false` no manifesto; nenhuma métrica registrada)
 
-Campos permitidos por linha, quando habilitada: id da tarefa, classificação T0–T3, agentes acionados, modelo/categoria, chamadas de ferramentas, arquivos lidos/relidos, documentos de contexto carregados, workspace reutilizado, duração, resultado, causa confirmada, testes aprovados, atualização de contexto realizada.
+Princípio: **código conta o que é contável; o modelo só declara o que só ele sabe.** Quem grava é o hook `fw-telemetry.py`, nunca o modelo e nunca um agente. O único campo de origem semântica é a classificação T0–T3; sua ausência degrada a linha (`task_class: null`), jamais a suprime.
+
+Campos permitidos por linha, quando habilitada: id da tarefa, classificação T0–T3, agentes acionados, modelo/categoria, chamadas de ferramentas (com discriminação por ferramenta), arquivos lidos/relidos, documentos de contexto carregados, workspace reutilizado, duração, resultado, testes aprovados, atualização de contexto realizada, `session_id`, versão do framework e versão do schema (`v`) — os três últimos são o que torna possível comparar execuções entre sessões e entre versões.
 
 Campos PROIBIDOS, sempre, mesmo habilitada: prompts completos, código-fonte, segredos, tokens, credenciais, informações pessoais, conteúdo integral de arquivo. Um campo proibido gravado é falha de política, não detalhe de implementação.
 
-Cobertura: tarefas T2/T3 registram via o agente `fw-*` acionado (regra carregada sob demanda); tarefas T0/T1 só registram se a linha condicional do `CLAUDE.md.ccf` estiver presente — habilitar a telemetria sem essa linha produz cobertura parcial, não erro silencioso (ver `tests/PROTOCOL.md`).
+Caminhos de arquivo: por padrão arquivos fora de `.claude/context/` entram como hash (conta releitura sem registrar o caminho). `telemetry.recordFilePaths: true` no manifesto troca isso por caminhos relativos — opt-in explícito do time. Arquivos do próprio contexto viajam pelo nome: são do framework e é a métrica que justifica sua existência.
 
-Armazenamento é local por padrão; recomenda-se adicionar o caminho ao `.gitignore` — é registro operacional, não conhecimento de projeto.
+Classificação T0–T3: quando a telemetria está ligada, o hook injeta (via `UserPromptSubmit`) a instrução para o modelo marcar a classe na resposta, e o consolidador extrai **apenas** o token casado pela regex `fw:class=(T[0-3])` do `last_assistant_message` do evento `Stop` — que contém só o texto final do assistente, **nunca o prompt do usuário**. O transcript é fallback, e mesmo ali só o token sobrevive. Desligada, nada é injetado — **custo zero no always-on**.
+
+Atribuição por agente: eventos de ferramenta disparados dentro de um subagente carregam `agent_type`, então `tools_by_agent` credita cada chamada a quem a fez. Sem isso, o total da tarefa seria creditado a todos os agentes acionados e qualquer comparação sairia inflada.
+
+Cobertura: com os três hooks instalados (`UserPromptSubmit`, `PostToolUse`, `Stop`), **todas** as classificações registram, inclusive T0 sem nenhuma chamada de ferramenta. Sem o hook instalado, nada é registrado — telemetria não tem caminho alternativo pelo modelo, por decisão de projeto (registro não verificável é pior que ausência de registro). O relatório sempre exibe a cobertura de classificação declarada; lacuna se reporta, não se esconde.
+
+Armazenamento é local por padrão; recomenda-se adicionar o caminho ao `.gitignore` — é registro operacional, não conhecimento de projeto. Retenção e teto de linhas vivem no manifesto (`retainDays`, `maxLines`), nunca aqui.
 
 ## Defasagem no arranque (fw-freshness)
 
