@@ -26,8 +26,9 @@ bloco com um CLAUDE.md existente sem apagar conteúdo do time. -->
   "Carregue quando" do índice. Não leia o repositório inteiro.
 - Nunca leia: lockfiles, `node_modules/`, `vendor/`, `dist/`, `build/`,
   `target/`, arquivos gerados, binários, assets.
-- Após mudanças significativas de código, sugira `fw-reviewer`. Para bugs não
-  triviais, sugira `fw-debugger`.
+- Para bugs não triviais, sugira `fw-debugger`. Para `fw-reviewer`, siga
+  apenas o Task Router abaixo (risco concreto — nunca por tamanho da
+  mudança); não existe gatilho automático por "mudança significativa".
 - Após tarefa que alterou estrutura relevante (arquivos novos, módulos
   movidos, contratos mudados), sugira `/farol:update` e inclua os arquivos
   de contexto atualizados NO MESMO conjunto de commits da mudança — nunca
