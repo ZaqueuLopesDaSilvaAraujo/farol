@@ -1,6 +1,10 @@
 ---
 name: status
-description: Verifica a saúde do framework e o frescor do contexto: idade da âncora, commits acumulados, tamanho da memória, integridade dos arquivos. Use quando o usuário pedir /farol:status ou no início de tarefas grandes se houver suspeita de contexto desatualizado.
+description: >
+  Verifica a saúde do framework e o frescor do contexto: idade da âncora,
+  commits acumulados, tamanho da memória, integridade dos arquivos. Use
+  quando o usuário pedir /farol:status ou no início de tarefas grandes se
+  houver suspeita de contexto desatualizado.
 ---
 
 # /farol:status — Saúde do contexto
