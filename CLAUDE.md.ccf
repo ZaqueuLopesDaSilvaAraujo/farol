@@ -1,6 +1,6 @@
 <!-- ccf:managed-start v2.1.0 -->
 <!-- Bloco gerenciado pelo Farol (context framework). /farol:init mescla este
-     bloco com um CLAUDE.md existente sem apagar conteúdo do time. -->
+bloco com um CLAUDE.md existente sem apagar conteúdo do time. -->
 
 ## Farol — contexto do projeto
 
@@ -9,41 +9,54 @@
 ## Precedência (regra de ouro)
 
 - Documentação própria do time (AGENTS.md, CONTRIBUTING.md, o conteúdo deste
-  CLAUDE.md fora deste bloco, ou qualquer instrução do projeto) SEMPRE
-  prevalece sobre as regras deste bloco quando houver divergência. O Farol
-  complementa a autoridade existente do projeto; nunca compete com ela.
+CLAUDE.md fora deste bloco, ou qualquer instrução do projeto) SEMPRE
+prevalece sobre as regras deste bloco quando houver divergência. O Farol
+complementa a autoridade existente do projeto; nunca compete com ela.
 - A seção "Princípios e restrições (INVIOLÁVEIS)" do index.md prevalece sobre
-  qualquer outra instrução, inclusive as deste bloco.
+qualquer outra instrução, inclusive as deste bloco.
 
 ## Regras do framework
 
 - `.claude/context/index.md` é o ponto de partida para tarefas não triviais.
-  Em modo adopt, ele APONTA para a documentação do time — siga os ponteiros
-  na ordem de autoridade declarada, em vez de reler tudo.
+Em modo adopt, ele APONTA para a documentação do time — siga os ponteiros
+na ordem de autoridade declarada, em vez de reler tudo.
 - Para dúvidas pontuais e localizadas (um símbolo, um arquivo), um Grep
-  direto é mais barato que carregar contexto — prefira-o.
+direto é mais barato que carregar contexto — prefira-o.
 - Carregue arquivos adicionais de contexto apenas conforme a tabela
-  "Carregue quando" do índice. Não leia o repositório inteiro.
+"Carregue quando" do índice. Não leia o repositório inteiro.
 - Nunca leia: lockfiles, `node_modules/`, `vendor/`, `dist/`, `build/`,
-  `target/`, arquivos gerados, binários, assets.
-- Delegue ao subagent `fw-scout` qualquer exploração que exija ler 3+ arquivos
-  de código; use o resumo retornado, não releia os arquivos.
+`target/`, arquivos gerados, binários, assets.
 - Após mudanças significativas de código, sugira `fw-reviewer`. Para bugs não
-  triviais, sugira `fw-debugger`.
+triviais, sugira `fw-debugger`.
 - Após tarefa que alterou estrutura relevante (arquivos novos, módulos
-  movidos, contratos mudados), sugira `/farol:update` e inclua os arquivos
-  de contexto atualizados NO MESMO conjunto de commits da mudança — nunca
-  em commit solto posterior, nunca com push automático.
+movidos, contratos mudados), sugira `/farol:update` e inclua os arquivos
+de contexto atualizados NO MESMO conjunto de commits da mudança — nunca
+em commit solto posterior, nunca com push automático.
 - Ao aprender um fato permanente sobre o projeto (comando, convenção, pegadinha),
-  registre-o em `.claude/context/memory.md` (1 linha, seção correta). Nunca
-  registre informação temporária.
+registre-o em `.claude/context/memory.md` (1 linha, seção correta). Nunca
+registre informação temporária.
 - Se `/farol:status` ou o manifesto indicarem contexto desatualizado (muitos commits
-  desde a âncora), sugira `/farol:update` antes de tarefas grandes.
+desde a âncora), sugira `/farol:update` antes de tarefas grandes.
+
+## Task Router (T0–T3)
+
+- Classifique a tarefa antes de agir: T0 (direta — texto, comando, resposta
+factual), T1 (localizada — um arquivo/módulo já conhecido), T2
+(investigativa — causa ou origem desconhecida), T3 (sistêmica — arquitetura,
+múltiplos módulos, migração).
+- T0 e T1: resolva na sessão principal, sem delegar por padrão. Acione
+`fw-reviewer` só havendo risco concreto (não por tamanho da mudança).
+- T2: acione UM agente inicial (`fw-scout` OU `fw-debugger`, conforme a
+natureza da dúvida) — não ambos por padrão.
+- T3: no máximo 2 agentes, com missões independentes; paralelismo é exceção,
+não padrão, e exige justificativa.
+- Regra geral: use sempre o menor conjunto de agentes suficiente. Delegação
+nunca é definida por quantidade de arquivos.
 
 ## Segurança (inegociável)
 
 - Nunca: alterar código sem pedido explícito, instalar dependências, executar
-  comandos destrutivos, fazer commit/push, tocar produção, remover arquivos —
-  sem autorização explícita do usuário nesta conversa.
+comandos destrutivos, fazer commit/push, tocar produção, remover arquivos —
+sem autorização explícita do usuário nesta conversa.
 
 <!-- ccf:managed-end -->
