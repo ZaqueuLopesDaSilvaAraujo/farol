@@ -97,8 +97,15 @@ def raw_path(root, session, cfg):
                         ".task-%s.jsonl" % (session or "anon"))
 
 
-def append_raw(root, session, record, cfg):
+def append_raw(root, session, record, cfg, abre_tarefa=False):
+    """So --prompt ABRE tarefa. Evento de ferramenta ou de subagente que chegue
+    sem tarefa aberta e descartado: observado em campo que um SubagentStop pode
+    chegar ATE ~2s DEPOIS do Stop principal ter consolidado, e criar o arquivo
+    ali deixaria um orfao que nunca vira linha — e que contaminaria a proxima
+    tarefa da mesma sessao."""
     path = raw_path(root, session, cfg)
+    if not abre_tarefa and not os.path.isfile(path):
+        return
     os.makedirs(os.path.dirname(path), exist_ok=True)
     record["t"] = time.time()
     with open(path, "a", encoding="utf-8") as fh:
@@ -129,7 +136,7 @@ def classify_path(root, path, record_paths):
 
 
 def mode_prompt(root, data, cfg):
-    append_raw(root, data.get("session_id"), {"e": "start"}, cfg)
+    append_raw(root, data.get("session_id"), {"e": "start"}, cfg, abre_tarefa=True)
     print(INSTRUCAO)
 
 
@@ -203,11 +210,13 @@ def prune(lines, cfg):
 
 
 def mode_consolidate(root, data, cfg):
-    # Stop dispara TAMBEM dentro de um subagente (o payload traz agent_type
-    # nesse caso). Consolidar ali fecharia e apagaria a raw no meio da tarefa,
-    # gerando varias linhas truncadas no lugar de uma. So o Stop da conversa
-    # principal — sem agent_type — encerra a tarefa.
-    if data.get("agent_type"):
+    # Stop dispara TAMBEM dentro de um subagente. Consolidar ali fecharia e
+    # apagaria a raw no meio da tarefa, gerando varias linhas truncadas.
+    #
+    # A guarda testa agent_id ANTES de agent_type: observado em campo que o
+    # agent_type pode chegar como string VAZIA com agent_id preenchido, e uma
+    # checagem por truthiness de agent_type sozinha deixaria esse caso passar.
+    if data.get("agent_id") or data.get("agent_type"):
         return
     session = data.get("session_id")
     raw = raw_path(root, session, cfg)
