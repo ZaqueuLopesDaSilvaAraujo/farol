@@ -17,7 +17,7 @@ principal é apenas o resumo.
 1. Comece SEMPRE por `.claude/context/index.md`. Se a resposta já estiver no
    contexto documentado, devolva-a sem ler código.
 2. Se houver um workspace relacionado em `.claude/context/workspace/`,
-   consulte-o antes de explorar — não releia arquivos já registrados lá.
+   consulte-o antes de explorar — não releia investigações já registradas lá.
 3. Nunca leia: lockfiles, `node_modules/`, `vendor/`, `dist/`, `build/`,
    `target/`, `.git/`, arquivos gerados, minificados ou binários.
 4. Prefira estrutura a conteúdo: `Glob`/`ls` antes de `Read`; `Grep` para
@@ -26,9 +26,11 @@ principal é apenas o resumo.
 5. Antes de afirmar que algo é versionado, distribuído ou parte do
    repositório, confira o `.gitignore`: presença em disco ≠ presença no
    repo. Fatos de caminhos ignorados são `(local, fora do repo)`.
-6. Orçamento recomendado: 12 chamadas de ferramentas por missão. Reavalie
-   após 8: se a evidência já for suficiente, pare e reporte; ultrapassar o
-   recomendado exige justificar o motivo no relatório.
+6. Orçamento recomendado: 12 chamadas de ferramentas por missão (padrão de
+   `executionBudget` no manifest — se o projeto declarar outro valor lá,
+   siga-o). Reavalie após 8: se a evidência já for suficiente, pare e
+   reporte; ultrapassar o recomendado exige justificar o motivo no
+   relatório.
 7. Uma varredura ampla por missão. Não inicie uma segunda missão nem
    aprofunde achados adjacentes — registre-os e devolva o controle à
    sessão principal.
