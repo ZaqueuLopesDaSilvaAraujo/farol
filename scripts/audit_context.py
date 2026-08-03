@@ -266,6 +266,29 @@ def check_escrita_dupla_projeto(report, projeto):
                    "%s/CLAUDE.md ainda carrega a instrucao de telemetria no always-on (bloco gerenciado anterior a 2.2.0): custo fixo por sessao sem escritor" % projeto)
 
 
+def check_ponteiros(report, root, ctx):
+    """Ponteiro morto num arquivo ALWAYS-ON e a falha de prioridade maxima do
+    framework — 'pior que ausencia, porque mente com confianca'. Ate aqui so
+    existia como checagem 7 do /farol:status, executada pelo modelo. Como todo
+    alvo e um caminho verificavel, e uma regra deterministica: vira ERRO.
+
+    Alvo resolve contra .claude/context/ (arquivos do proprio contexto) OU
+    contra a raiz do projeto (modo adopt aponta para a doc do time)."""
+    idx = read(os.path.join(ctx, "index.md"))
+    if idx is None:
+        return
+    alvos = sorted(set(re.findall(r"`([A-Za-z0-9_./-]+\.md)`", idx)))
+    mortos = [a for a in alvos
+              if not os.path.isfile(os.path.join(ctx, a))
+              and not os.path.isfile(os.path.join(root, a))]
+    if mortos:
+        report.add(ERROR, "index-ponteiros",
+                   "index.md aponta para alvo inexistente: %s" % ", ".join(mortos))
+    else:
+        report.add(OK, "index-ponteiros",
+                   "%d alvo(s) do index.md existem no disco" % len(alvos))
+
+
 def check_telemetry_project(report, manifest_path):
     text = read(manifest_path)
     if text is None:
@@ -310,6 +333,7 @@ def audit_project(report, root):
     ctx = os.path.join(root, ".claude", "context")
     check_teto(report, os.path.join(ctx, "index.md"), 120, "index-teto")
     check_teto(report, os.path.join(ctx, "memory.md"), 150, "memory-teto")
+    check_ponteiros(report, root, ctx)
     check_execution_budget(report, os.path.join(ctx, "manifest.json"))
     check_model_policy_project(report, os.path.join(ctx, "manifest.json"))
     check_telemetry_project(report, os.path.join(ctx, "manifest.json"))
