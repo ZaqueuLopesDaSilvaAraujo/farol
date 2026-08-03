@@ -183,6 +183,29 @@ def check_telemetry(report, root):
     else:
         report.add(WARN, "telemetry-policy", "nenhuma secao de telemetria (campos permitidos/proibidos) encontrada em %s" % policies_path)
 
+    # Escritor e leitor: telemetria sem escritor e campo morto; sem leitor e
+    # dado gravado e nunca lido (o defeito que a v2.2.0 corrigiu).
+    writer = os.path.join(root, "hooks", "fw-telemetry.py")
+    if os.path.isfile(writer):
+        report.add(OK, "telemetry-writer", "%s encontrado" % writer)
+    else:
+        report.add(ERROR, "telemetry-writer", "%s nao encontrado (telemetria sem escritor deterministico)" % writer)
+    reader = os.path.join(root, "scripts", "report_telemetry.py")
+    if os.path.isfile(reader):
+        report.add(OK, "telemetry-reader", "%s encontrado" % reader)
+    else:
+        report.add(ERROR, "telemetry-reader", "%s nao encontrado (dado gravado e nunca lido)" % reader)
+
+    # Guarda contra escrita dupla: com o hook como escritor unico, o always-on
+    # NAO pode voltar a instruir o modelo a gravar a linha.
+    claude = read(os.path.join(root, "CLAUDE.md.ccf"))
+    escrita_modelo = re.compile(r"registre uma linha JSONL", re.IGNORECASE)
+    if claude and escrita_modelo.search(claude):
+        report.add(ERROR, "telemetry-escrita-dupla",
+                   "CLAUDE.md.ccf instrui o modelo a gravar a linha: com o hook instalado isso duplica registro")
+    else:
+        report.add(OK, "telemetry-escrita-dupla", "always-on nao instrui escrita pelo modelo")
+
     init_path = os.path.join(root, "skills", "init", "SKILL.md")
     init_text = read(init_path)
     schema = re.compile(r"\"telemetry\"", re.IGNORECASE)
@@ -211,7 +234,15 @@ def check_telemetry_project(report, manifest_path):
         telemetry = data["telemetry"] if isinstance(data["telemetry"], dict) else {}
         enabled = bool(telemetry.get("enabled"))
         report.add(OK, "telemetry-manifest", "presente em %s (enabled=%s)" % (manifest_path, enabled))
+        if "schemaVersion" not in telemetry:
+            report.add(WARN, "telemetry-schema-version",
+                       "%s sem telemetry.schemaVersion (linhas nao serao comparaveis entre versoes)" % manifest_path)
         if enabled:
+            projeto = os.path.dirname(os.path.dirname(os.path.dirname(manifest_path)))
+            hook = os.path.join(projeto, ".claude", "hooks", "fw-telemetry.py")
+            if not os.path.isfile(hook):
+                report.add(WARN, "telemetry-hook-instalado",
+                           "telemetry.enabled=true mas %s nao existe: campo ligado sem escritor nao gera registro" % hook)
             log_path = telemetry.get("path")
             if log_path and not os.path.isfile(log_path):
                 report.add(WARN, "telemetry-log", "telemetry.enabled=true mas %s nao existe ainda" % log_path)
