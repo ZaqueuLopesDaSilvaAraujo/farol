@@ -27,6 +27,10 @@ DEFAULT_PATH = os.path.join(".claude", "context", "telemetry", "log.jsonl")
 CLASSES = ("T0", "T1", "T2", "T3")
 
 
+def ATOR():
+    return {"tarefas": 0, "invocacoes": 0, "tool_calls": 0}
+
+
 def carregar(root, since_days=None):
     caminho = DEFAULT_PATH
     try:
@@ -86,15 +90,19 @@ def agregar(linhas):
         alvo["agentes"] += reg.get("agents_total") or 0
         alvo["duracoes"].append(reg.get("duration_ms") or 0)
 
+        # Duas contagens distintas, de propósito: 'invocacoes' só faz sentido
+        # para subagentes (quantas vezes foram acionados); a sessao principal
+        # nunca e "invocada". 'tarefas' e o denominador honesto para ambos.
         for agente in reg.get("agents") or []:
-            linha = ag["por_agente"].setdefault(agente, {"n": 0, "tool_calls": 0})
-            linha["n"] += 1
+            linha = ag["por_agente"].setdefault(agente, ATOR())
+            linha["invocacoes"] += 1
         # Atribuicao real: chamadas feitas DENTRO de cada agente, via agent_type
         # do PostToolUse. Antes disso o total da tarefa era creditado a todos os
         # agentes acionados — o que inflava qualquer comparacao.
         for dono, qtd in (reg.get("tools_by_agent") or {}).items():
-            linha = ag["por_agente"].setdefault(dono, {"n": 0, "tool_calls": 0})
+            linha = ag["por_agente"].setdefault(dono, ATOR())
             linha["tool_calls"] += qtd
+            linha["tarefas"] += 1
 
         for nome, qtd in (reg.get("tools") or {}).items():
             ag["por_ferramenta"][nome] = ag["por_ferramenta"].get(nome, 0) + qtd
@@ -164,8 +172,9 @@ def render_full(ag, invalidas, destino):
     if ag["por_agente"]:
         for nome, d in sorted(ag["por_agente"].items(),
                               key=lambda x: -x[1]["tool_calls"]):
-            out.append("  %-14s execucoes=%-4d tool_calls=%-5d" % (
-                nome or "(anonimo)", d["n"], d["tool_calls"]))
+            inv = "-" if nome == "principal" else str(d["invocacoes"])
+            out.append("  %-14s tarefas=%-4d invocacoes=%-4s tool_calls=%-5d" % (
+                nome or "(anonimo)", d["tarefas"], inv, d["tool_calls"]))
     else:
         out.append("  nenhum subagente registrado")
 
